@@ -1,0 +1,25 @@
+@using Microsoft.AspNetCore.Identity
+@using FreshMart.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li>
+        <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+    </li>
+    <li>
+        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+            <button type="submit" class="btn btn-default btn-link">Log out</button>
+        </form>
+    </li>
+
+
+}
+else
+{
+    <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+    <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+
+}

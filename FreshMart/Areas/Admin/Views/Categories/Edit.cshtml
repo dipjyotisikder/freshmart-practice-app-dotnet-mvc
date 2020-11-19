@@ -1,0 +1,63 @@
+﻿@model FreshMart.Areas.Admin.ViewModels.CategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_adminlayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            All Categories
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Tables</a></li>
+            <li class="active">Data tables</li>
+        </ol>
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Update Category</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    @using (Html.BeginForm("Edit", "Categories", new { id = Model.Category.Id }, FormMethod.Post))
+                    {
+                        <div class="box-body">
+                            @Html.HiddenFor(c => c.Category.Id)
+
+                            <div class="form-group">
+                                <label asp-for="Category.Name" class="control-label"></label>
+                                @Html.TextBoxFor(m => m.Category.Name, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Category.Domain, htmlAttributes: new { @class = "control-label " })
+                                <div class="col-md-12">
+                                    @Html.DropDownListFor(model => model.Category.Domain, new SelectList(Model.CategoryDomains, "Name", "Name"), "Select Category Domain", new { @class = "form-control " })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>

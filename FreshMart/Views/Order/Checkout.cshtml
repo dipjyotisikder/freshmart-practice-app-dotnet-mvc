@@ -1,0 +1,286 @@
+﻿@model FreshMart.ViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+@* <link href="~/Assets/css/Checkout.css" rel="stylesheet" /> *@
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<h2 class="text-center">Checkout</h2>
+
+
+<hr />
+<div class="">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 clearfix" id="checkout">
+                <div class="box">
+                    <form method="post" asp-action="Checkout" asp-controller="Order">
+
+                        <div class="content">
+
+                            @if (Model.Customer == null)
+                            {
+                                <!-- /.row -->
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label asp-for="Order.Name" class="control-label"></label>
+                                            <input asp-for="Order.Name" class="form-control" />
+                                            <span asp-validation-for="Order.Name" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label asp-for="Order.Email" class="control-label"></label>
+                                            <input id="emailInp" asp-for="Order.Email" class="form-control" />
+                                            <span asp-validation-for="Order.Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+
+
+                                    @if (ViewBag.Email != null)
+                                    {
+                                        @Html.HiddenFor(c => c.Order.Email)
+                                        <script>
+                                            document.getElementById("emailInp").disabled = true;
+                                        </script>
+                                    }
+
+
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Customer.Phone" class="control-label"></label>
+                                            <input asp-for="Customer.Phone" class="form-control" />
+                                            <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="Customer.DateOfBirth" class="control-label"></label>
+                                            <input asp-for="Customer.DateOfBirth" class="form-control" />
+                                            <span asp-validation-for="Customer.DateOfBirth" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Order.DistrictId, htmlAttributes: new { @class = "control-label " })
+                                            <div class="col-md-12">
+                                                @Html.DropDownListFor(model => model.Order.DistrictId, new SelectList(Model.District, "Id", "Name"), "Select District", new { @class = "form-control col-md-12" })
+                                                @Html.ValidationMessageFor(model => model.Order.DistrictId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            }
+                            else
+                            {
+                                @Html.HiddenFor(c => c.Customer.Id)
+                                @Html.HiddenFor(c => c.Order.Email)
+                            }
+
+                            <!-- /.row -->
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="Order.ShippingAddress" class="control-label"></label>
+                                        <input asp-for="Order.ShippingAddress" class="form-control" />
+                                        <span asp-validation-for="Order.ShippingAddress" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="Order.PostalCode" class="control-label"></label>
+                                        <input asp-for="Order.PostalCode" class="form-control" />
+                                        <span asp-validation-for="Order.PostalCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <!-- /.row -->
+                            <div class="row">
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="Order.Zip" class="control-label"></label>
+                                        <input asp-for="Order.Zip" class="form-control" />
+                                        <span asp-validation-for="Order.Zip" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="Order.StreetNo" class="control-label"></label>
+                                        <input asp-for="Order.StreetNo" class="form-control" />
+                                        <span asp-validation-for="Order.StreetNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                            <!-- /.row -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h2> Complete Your Payment First !</h2>
+                                    <h3> Our Bkash: 01676501078 </h3>
+                                    <h3> Our DBBL: 01676501078 </h3>
+                                </div>
+                            </div>
+
+
+
+                            <!-- /.row -->
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="Order.AccountNo" class="control-label"></label>
+                                        <input asp-for="Order.AccountNo" class="form-control" />
+                                        <span asp-validation-for="Order.AccountNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="Order.TransactionId" class="control-label"></label>
+                                        <input asp-for="Order.TransactionId" class="form-control" />
+                                        <span asp-validation-for="Order.TransactionId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="pull-left">
+                            <button type="submit" class="btn btn-template-main">
+                                <i class="fa fa-chevron-right"></i>
+                                Continue Shopping
+                            </button>
+                        </div>
+
+                        <div class="pull-right">
+                            <button type="submit" class="btn btn-template-main">
+                                Continue Checkout<i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        @Html.HiddenFor(c => c.TotalPrice);
+
+                    </form>
+                </div>
+                <!-- /.box -->
+
+            </div>
+            <!-- /.col-md-9 -->
+
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+</div>
+
+
+
+@if (ViewBag.CartCount == 0)
+{
+    <h1 class="text-center" style="margin-bottom:50px">Your Cart Is Empty</h1>
+}
+
+else
+{
+    <!-- checkout -->
+    <div class="checkout">
+        <div class="container">
+            <h3>Your shopping cart contains: <span style="color: coral; font-size: 25px;">@Model.CartCount </span>Products</h3>
+
+            <div class="checkout-right">
+
+                <table class="timetable_sub">
+                    <thead>
+                        <tr>
+                            <th>SL No.</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    @{
+                        int count = 1;
+                    }
+
+                    @foreach (var items in ViewBag.cart)
+                    {
+                        <tr class="rem1">
+                            <td class="invert">@count</td>
+                            <td class="invert-image">
+                                <a href="single.html">
+                                    <img style="max-height:60px; max-width:60px;" src="@items.Product.ImagePath" alt=" "
+                                         class="img-responsive" />
+                                </a>
+                            </td>
+                            <td class="invert">
+                                <div class="quantity">
+                                    <div class="quantity-select">
+                                        <div class=""><span>@items.Quantity</span></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="invert">@items.Product.Title</td>
+                            <td class="invert">@items.Product.Price</td>
+                            <td class="invert">
+                                <div class="rem">
+                                    <a asp-controller="Cart" asp-action="RemoveItem" asp-route-id="@items.Product.Id" class="close1"></a>
+                                </div>
+                            </td>
+                        </tr>
+                        count++;
+                    }
+
+                    @if (ViewBag.total == null)
+                    {
+                        <tr class="rem1" style="height:70px;">
+                            <td class="invert glyphicon-bold">Total Price : $0 </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="rem1" style="height:40px; height:70px;">
+                            <td class="invert">Total Price : $@ViewBag.total </td>
+                        </tr>
+                    }
+
+                    <!--quantity-->
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- //checkout -->
+
+}
+
+
+
+<div>
+    <a asp-action="">Back to List</a>
+</div>
+

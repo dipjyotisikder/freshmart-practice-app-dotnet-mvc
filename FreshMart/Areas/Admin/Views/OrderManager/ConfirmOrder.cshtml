@@ -1,0 +1,81 @@
+﻿@model FreshMart.Areas.Admin.ViewModels.OrderVM
+@{
+    ViewData["Title"] = "ConfirmOrder";
+    Layout = "~/Areas/Admin/Views/Shared/_adminlayout.cshtml";
+}
+
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            All Orders
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Tables</a></li>
+            <li class="active">Data tables</li>
+        </ol>
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Confirm This Order</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    @using (Html.BeginForm("Match", "OrderManager", FormMethod.Post))
+                    {
+                        <div class="box-body">
+                            @Html.HiddenFor(c => c.Order.Id)
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Account Number</label>
+                                @Html.TextBoxFor(c => c.MatchVm.AccountNo, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Transacion ID</label>
+                                @Html.TextBoxFor(c => c.MatchVm.TransactionId, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Match</button>
+
+                            @if (ViewBag.confirm != null)
+                            {
+                                <h5 class="text-green">@ViewBag.confirm</h5>
+                            }
+
+                        </div>
+                    }
+
+                    @if (ViewBag.confirm != null)
+                    {
+                        <div class="box-footer with-border">
+                            @Html.ActionLink("Approve", "ConfirmOrder", "OrderManager", new { id = Model.Order.Id, approve = true })
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="box-footer with-border">
+                            <h5 class="text-yellow">You Can not Approve until match both..</h5>
+                        </div>
+                    }
+
+                </div>
+                <!-- /.box -->
+            </div>
+
+
+
+        </div>
+    </section>
+</div>

@@ -1,0 +1,140 @@
+﻿@model FreshMart.ViewModels.ProductViewModel
+
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+
+<h2 class="text-center" style="margin-bottom:50px">Cart</h2>
+
+@if (TempData["orderSuccess"] != null)
+{
+    <h3 class="text-center" style="margin-bottom:50px">@TempData["orderSuccess"]</h3>
+}
+
+@if (ViewBag.CartCount == 0)
+{
+    <h1 class="text-center" style="margin-bottom:50px">Your Cart Is Empty</h1>
+
+}
+
+
+
+else
+{
+    <!-- checkout -->
+    <div class="checkout">
+        <div class="container">
+            <h3>Your shopping cart contains: <span style="color: coral; font-size: 25px;">@Model.CartCount </span>Products</h3>
+            <!---728x90--->
+            <div style='margin: 0 auto;text-align: center;margin-top: 5px;'>
+                <script>
+                    var allowedNumberOfEboundDynamicAdds = 4;
+                    var sizesEboundDynamicAdsDesktop = ['728x90'];
+                    var sizesEboundDynamicAdsTablet = ['728x90'];
+                    var sizesEboundDynamicAdsMobile = ['320x100'];
+                    eboundAdsTagByDevice(sizesEboundDynamicAdsDesktop, sizesEboundDynamicAdsTablet, sizesEboundDynamicAdsMobile, 'ebound_header_tag');
+
+                    if (typeof user_tag_config == 'undefined') {
+                        var user_tag_config = {};
+                    }
+                    user_tag_config['ebound_header_tag'] = {};
+                    user_tag_config['ebound_header_tag']['desktop'] = {};
+                    user_tag_config['ebound_header_tag']['desktop']['cpm'] = '';
+                    user_tag_config['ebound_header_tag']['desktop']['adsCode'] = '';
+                    user_tag_config['ebound_header_tag']['tablet'] = {};
+                    user_tag_config['ebound_header_tag']['tablet']['cpm'] = '';
+                    user_tag_config['ebound_header_tag']['tablet']['adsCode'] = '';
+                    user_tag_config['ebound_header_tag']['mobile'] = {};
+                    user_tag_config['ebound_header_tag']['mobile']['cpm'] = '';
+                    user_tag_config['ebound_header_tag']['mobile']['adsCode'] = '';
+                </script>
+            </div>
+
+            <div class="checkout-right">
+                @using (Html.BeginForm("UpdateItem", "cart"))
+                {
+                    <table class="timetable_sub">
+                        <thead>
+                            <tr>
+                                <th>SL No.</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        @{
+                            int count = 1;
+                        }
+
+                        @foreach (var items in @ViewBag.cart)
+                        {
+                            <tr class="rem1">
+                                <td class="invert">@count</td>
+                                <td class="invert-image">
+                                    <a href="single.html">
+                                        <img style="max-height:60px; max-width:60px;" src="@items.Product.ImagePath" alt=" "
+                                             class="img-responsive" />
+                                    </a>
+                                </td>
+                                <td class="invert">
+                                    <div class="quantity">
+                                        <div class="quantity-select">
+                                            <div class=""><span>@items.Quantity</span></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="invert">@items.Product.Title</td>
+                                <td class="invert">@items.Product.Price</td>
+                                <td class="invert">
+                                    <div class="rem">
+                                        <a asp-controller="Cart" asp-action="RemoveItem" asp-route-id="@items.Product.Id" class="close1"></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            count++;
+                        }
+
+                        @if (ViewBag.total == null)
+                        {
+                            <tr class="rem1" style="height:70px;">
+                                <td class="invert glyphicon-bold">Total Price : $0 </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="rem1" style="height:40px; height:70px;">
+                                <td class="invert">Total Price : $@ViewBag.total </td>
+                            </tr>
+                        }
+
+
+
+                        <!--quantity-->
+                    </table>
+
+                    @*                     <button class="btn btn-default" type="submit"> Update Quantity</button> *@
+                }
+
+            </div>
+
+
+            <div class="checkout-left">
+                <a asp-controller="Products" asp-action="Index" class="checkout-left-basket">
+                    <h4><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>Continue Shopping</h4>
+                </a>
+                <div class="checkout-right-basket">
+                    <a asp-controller="Order" asp-action="Checkout">
+                        <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>Go For Checkout
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!-- //checkout -->
+
+}
+

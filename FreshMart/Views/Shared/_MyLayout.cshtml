@@ -1,0 +1,253 @@
+﻿@model FreshMart.ViewModels.LayoutCategoryViewModel
+
+<!DOCTYPE html>
+<html charset=UTF-8>
+<head>
+    <title>Fresh Mart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/x-javascript">
+        addEventListener("load", function () {
+               setTimeout(hideURLbar, 0);
+           }, false);
+
+           function hideURLbar() {
+               window.scrollTo(0, 1);
+           } </script>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/Assets/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Assets/css/Checkout.css" rel="stylesheet" />
+    <link href="~/Assets/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Assets/css/fasthover.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- js -->
+    <script src="~/Assets/js/jquery.min.js"></script>
+    <!-- //js -->
+    <!-- countdown -->
+    <link rel="stylesheet" href="~/Assets/js/jquery.countdown.js" />
+    <!-- //countdown -->
+    <!-- cart -->
+    <script src="~/Assets/js/simpleCart.min.js"></script>
+    <!-- cart -->
+    <!-- for bootstrap working -->
+    <script type="text/javascript" src="~/Assets/js/bootstrap-3.1.1.min.js"></script>
+    <!-- //for bootstrap working -->
+    <!-- start-smooth-scrolling -->
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+                $('html,body').animate({ scrollTop: $(this.hash).offset().top }, 1000);
+            });
+        });
+    </script>
+    <!-- //end-smooth-scrolling -->
+
+    <script src="~/Assets/js/bootstrap.min.js" id="bootstrap-css"></script>
+    <script src="~/Assets/js/jquery-1.11.1.min.js"></script>
+    <link href="~/Assets/css/form.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="header">
+        <!--Header -->
+        <div class="header" id="home1">
+            <div class="container">
+
+                <div class="w3l_logo">
+                    <h1><a asp-controller="Home" asp-action="Index" class="text-center">Fresh Mart<span>For fresh hearts</span></a></h1>
+                </div>
+
+                <div class="cart box_1">
+                    <a asp-controller="Cart" asp-action="Cart">
+                        <div class="total">
+                            <span>Total&nbsp;$@Model.TotalPrice</span>
+                        </div>
+                        <img src="~/Assets/images/bag.png" alt="" />
+                    </a>
+                    @if (Model.CartCount == 0)
+                    {
+                        <p><a asp-controller="Cart" asp-action="cart">Empty Cart</a></p>
+                    }
+                    else if (@Model.CartCount == 1)
+                    {
+                        <p><a asp-controller="Cart" asp-action="cart"> @Model.CartCount Item In Cart</a></p>
+                    }
+
+                    else
+                    {
+                        <p><a asp-controller="Cart" asp-action="cart"> @Model.CartCount Items In Cart</a></p>
+                    }
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="left box_1" style="padding-right: 20px;">
+                    <p><a asp-controller="AdminAccount" asp-action="SignIn" asp-area="Admin" style="color: darkseagreen;font-size: 25px;">Admin</a></p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="navigation">
+            <div class="container">
+                <nav class="navbar navbar-default">
+
+                    <div class="navbar-header nav_2">
+                        <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse"
+                                data-target="#bs-megadropdown-tabs">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+                        <ul class="nav navbar-nav">
+
+                            <!-- Mega Menu -->
+                            <li class="dropdown">
+
+                                <a href="/products/" class="dropdown-toggle" data-toggle="dropdown">
+                                    Categories <span><b class="caret"></b></span>
+                                </a>
+                                <ul class="dropdown-menu multi-column columns-3">
+                                    <div class="row">
+
+                                        @foreach (var domain in Model.DistinctCat)
+                                        {
+                                            var domainbyid = Model.Category.Where(c => c.Domain == domain).Select(c => c.Id).First();
+                                            int count = Model.DistinctCat.Count;
+                                            int val = 12 / count;
+                                            <div class="col-sm-@val">
+                                                <ul class="multi-column-dropdown">
+
+                                                    <h6>@Html.ActionLink(domain, "category", "products", new { id = domainbyid })</h6>
+                                                    @{
+                                                        var data = Model.Category.Where(c => c.Domain == domain).Select(c => c.Name).ToList();
+                                                        foreach (var items in data)
+                                                        {
+                                                            var ID = Model.Category.Where(c => c.Name == items).Select(c => c.Id).First();
+                                                            <li>
+                                                                @Html.ActionLink(items, "index", "products", new { id = ID })
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                        @*This is category Loop end*@
+
+
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </ul>
+
+                            </li>
+
+                            <li><a asp-controller="Products" asp-action="Index">Buy</a></li>
+
+
+                            @Html.Partial("_SellPartial")
+
+                            <li><a asp-controller="Home" asp-action="Faq">FAQ</a></li>
+                            <li><a asp-controller="Cart" asp-action="cart">Cart</a></li>
+                            <li><a asp-controller="Customers" asp-action="Index">Customer</a></li>
+                            @Html.Partial("_LoginPartial")
+
+
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- //header -->
+
+    </div>
+
+
+
+
+
+    @RenderBody()
+
+
+
+
+
+    <!-- footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="w3_footer_grids">
+                <div class="col-md-3 w3_footer_grid">
+                    <h3>Contact</h3>
+
+                    <ul class="address">
+                        <li>
+                            <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>1234k Avenue, 4th block,
+                            <span>Barisal</span>
+                        </li>
+                        <li>
+                            <i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@example.com">info@freshmart.com</a>
+                        </li>
+                        <li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+880 34 567 567</li>
+                    </ul>
+                </div>
+                <div class="col-md-3 w3_footer_grid">
+                    <h3>Information</h3>
+                    <ul class="info">
+                        <li><a href="/Home/about">About Us</a></li>
+                        <li><a href="/Home/Faq">FAQ's</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 w3_footer_grid">
+                    <h3>Category</h3>
+
+
+
+                    <ul class="info">
+
+
+                        @foreach (var domain in Model.DistinctCat)
+                        {
+                            var domainbyid = Model.Category.Where(c => c.Domain == domain).Select(c => c.Id).First();
+
+                            <li class="multi-column-dropdown">
+                                @Html.ActionLink(domain, "category", "products", new { id = domainbyid })
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-md-3 w3_footer_grid">
+
+                    <h4>Follow Us</h4>
+                    <div class="agileits_social_button">
+                        <ul>
+                            <li><a href="#" class="facebook"> </a></li>
+                            <li><a href="#" class="twitter"> </a></li>
+                            <li><a href="#" class="google"> </a></li>
+                            <li><a href="#" class="pinterest"> </a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <div class="footer-copy1">
+                <div class="footer-copy-pos">
+                    <a href="#home1" class="scroll"><img src="~/Assets/images/product_images/arrow.png" alt=" " class="img-responsive" /></a>
+                </div>
+            </div>
+            <div class="container">
+                <p>
+                    &copy; Fresh Mart. All rights reserved
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- //footer -->
+
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

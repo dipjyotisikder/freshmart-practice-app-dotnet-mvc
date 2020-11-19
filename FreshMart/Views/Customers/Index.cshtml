@@ -1,0 +1,80 @@
+﻿@using FreshMart.Models
+@model FreshMart.Models.Customer
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" style="padding:30px;">
+        <h1 class="text-center">
+            Your Profile
+        </h1>
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content" style="width: 500px;margin: 0px auto;">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Update Your Profile</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        @using (Html.BeginForm("Edit", "Customers", FormMethod.Post))
+                        {
+
+
+                            <input type="hidden" asp-for="Id" />
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Phone" class="control-label"></label>
+                                <input asp-for="Phone" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DateOfBirth" class="control-label"></label>
+                                <input asp-for="DateOfBirth" class="form-control" />
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                @{
+                                    List<District> districts = (List<District>)ViewBag.districts;
+                                }
+                                @Html.LabelFor(c => c.DistrictId, new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.DistrictId, new SelectList(districts, "Id", "Name"), "Select District", new { @class = "form-control" })
+
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Update Profile" class="btn btn-default" />
+                            </div>
+                        }
+
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+
+

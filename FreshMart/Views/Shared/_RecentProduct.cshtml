@@ -1,0 +1,63 @@
+﻿@model FreshMart.ViewModels.LayoutCategoryViewModel
+<!-- top-brands -->
+<div class="top-brands">
+    <div class="container">
+        <h3>Recently added Products</h3>
+
+        @{
+
+            var p = Model.BaseProduct.Where(c => c.CreatedAt >= (DateTime.Now.AddDays(-5)));
+        }
+
+        <div class="sliderfig">
+            <ul id="flexiselDemo1">
+                @foreach (var items in p)
+                {
+                    <li class="card" style="max-height: 250px">
+
+                        <img src=@items.ImagePath alt=" " class="img-responsive" />
+
+                        <h4> @items.Title</h4>
+
+                        <div class="card-body">
+                            <h5 class="card-title"> @items.Title</h5>
+                        </div>
+                    </li>
+                }
+
+            </ul>
+        </div>
+
+
+        <script type="text/javascript">
+            $(window).load(function () {
+                $("#flexiselDemo1").flexisel({
+                    visibleItems: 4,
+                    animationSpeed: 1000,
+                    autoPlay: false,
+                    autoPlaySpeed: 3000,
+                    pauseOnHover: true,
+                    enableResponsiveBreakpoints: true,
+                    responsiveBreakpoints: {
+                        portrait: {
+                            changePoint: 480,
+                            visibleItems: 1
+                        },
+                        landscape: {
+                            changePoint: 640,
+                            visibleItems: 2
+                        },
+                        tablet: {
+                            changePoint: 768,
+                            visibleItems: 3
+                        }
+                    }
+                });
+
+            });
+        </script>
+
+        <script type="text/javascript" src="~/Assets/js/jquery.flexisel.js"></script>
+    </div>
+</div>
+<!-- //top-brands -->

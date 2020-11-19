@@ -1,0 +1,172 @@
+﻿@model IEnumerable<FreshMart.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" style="padding:30px;">
+        <h1 class="text-center">
+            Your Placed Orders
+        </h1>
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content" style="width:auto;margin: 0px auto;">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title text-center">See Your Order Status</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AccountNo)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.TransactionId)
+                                    </th>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ShippingAddress)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.PostalCode)
+                                    </th>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.StreetNo)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.TotalPrice)
+                                    </th>
+                                    <th>
+                                        Order Status
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.OrderDate)
+                                    </th>
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.AccountNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TransactionId)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ShippingAddress)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.PostalCode)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StreetNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TotalPrice)
+                                        </td>
+
+                                        <td>
+                                            @{
+                                                List<AgentOrder> agOrder = (List<AgentOrder>)ViewBag.agentOrders;
+                                                foreach (var agentOrder in agOrder)
+                                                {
+                                                    int flag = 0;
+                                                    if (agentOrder.OrderId == item.Id)
+                                                    {
+                                                        flag++;
+                                                    }
+
+                                                    if (flag == 1)
+                                                    {
+                                                        if (agentOrder.IsPaid == true)
+                                                        {
+                                                            <a aria-disabled="True" class="text-success"> Paid</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a aria-disabled="True"> Payment Not Approved</a>
+                                                        }
+
+                                                        if (agentOrder.IsOnRoute == true)
+                                                        {
+                                                            <span>|</span>
+                                                            <a aria-disabled="True"> On Route</a>
+                                                        }
+                                                        if (agentOrder.IsFullyCompleted == true)
+                                                        {
+                                                            <span>|</span>
+                                                            <a aria-disabled="True"> Fully Completed</a>
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                        </td>
+
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OrderDate)
+                                        </td>
+
+
+
+                                        <td>
+                                            @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+
+                                            @Html.ActionLink("Delete", "DeleteOrder", "Customers", new { id = item.Id }, new { @class = "btn btn-danger" })
+                                            @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

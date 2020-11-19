@@ -1,0 +1,35 @@
+﻿@model FreshMart.ViewModels.LayoutCategoryViewModel
+
+
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    Products <span><a asp-controller="Products" asp-action="Index"><b class="caret"></b></a></span>
+</a>
+<ul class="dropdown-menu multi-column columns-3">
+    <div class="row">
+
+
+        @*This is category Loop start*@
+        @foreach (var domain in Model.DistinctCat)
+        {
+            var domainbyid = Model.Category.Where(c => c.Domain == domain).Select(c => c.Id).First();
+            <div class="col-sm-4">
+                <ul class="multi-column-dropdown">
+                    <h6>@Html.ActionLink(domain, "category", "products", new { id = domainbyid })</h6>
+
+                    @{
+                        var data = Model.Category.Where(c => c.Domain == domain).Select(c => c.Name).ToList();
+                        foreach (var items in data)
+                        {
+                            var ID = Model.Category.Where(c => c.Name == items).Select(c => c.Id).First();
+                            <li>
+                                @Html.ActionLink(items, "index", "products", new { id = ID })
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+        @*This is category Loop end*@
+
+    </div>
+</ul>

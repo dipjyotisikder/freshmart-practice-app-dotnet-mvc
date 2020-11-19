@@ -1,0 +1,89 @@
+﻿@using FreshMart.Models
+@model FreshMart.Models.Agent
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AgentLayout.cshtml";
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" style="padding:30px;">
+        <h1 class="text-center">
+            Be An Agent
+
+        </h1>
+
+        @if (TempData["notapproved"] != null)
+        {
+            <h3>@TempData["notapproved"]</h3>
+        }
+
+
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content" style="width: 500px;margin: 0px auto;">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Make an Agent Request</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        @using (Html.BeginForm("AgentRequest", "Agents", FormMethod.Post))
+                        {
+
+
+                            <input type="hidden" asp-for="Id" />
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.HiddenFor(c => c.Email)
+                                <label asp-for="Email" class="control-label"></label>
+                                <input id="emailInp" asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Phone" class="control-label"></label>
+                                <input asp-for="Phone" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+
+
+                            <div class="form-group">
+                                @{
+                                    List<District> districts = (List<District>)ViewBag.districts;
+                                }
+                                @Html.LabelFor(c => c.DistrictId, new { @class = "control-label" })
+                                @Html.DropDownListFor(model => model.DistrictId, new SelectList(districts, "Id", "Name"), "Select District", new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Request" class="btn btn-default" />
+                            </div>
+                        }
+
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+<script>
+    document.getElementById("emailInp").disabled = true;
+</script>
+

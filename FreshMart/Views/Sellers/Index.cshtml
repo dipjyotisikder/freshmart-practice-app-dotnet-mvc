@@ -1,0 +1,83 @@
+﻿@model FreshMart.ViewModels.SellerVM
+
+@{
+    Layout = "~/Views/Shared/_SellerLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-login">
+                <div class="panel-heading">
+                    <h2 class="text-center" style="color: cornflowerblue"> Your Profile</h2>
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <form id="login-form" method="post" asp-controller="Sellers" asp-action="Update" role="form" style="display: block;">
+
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                @Html.HiddenFor(c => c.Seller.Id)
+                                @Html.HiddenFor(c => c.Seller.Approval)
+
+                                <div class="form-group">
+                                    <label asp-for="Seller.Name" class="control-label"></label>
+                                    <input asp-for="Seller.Name" class="form-control" />
+                                    <span asp-validation-for="Seller.Name" class="text-danger"></span>
+                                </div>
+
+                                @Html.HiddenFor(c => c.Seller.Email)
+                                <div class="form-group">
+                                    <label asp-for="Seller.Email" class="control-label"></label>
+                                    <input asp-for="Seller.Email" class="form-control" disabled="disabled" value="@Model.Seller.Email" />
+                                    <span asp-validation-for="Seller.Email" class="text-danger"></span>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label asp-for="Seller.CompanyName" class="control-label"></label>
+                                    <input asp-for="Seller.CompanyName" class="form-control" />
+                                    <span asp-validation-for="Seller.CompanyName" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Seller.Phone" class="control-label"></label>
+                                    <input asp-for="Seller.Phone" class="form-control" />
+                                    <span asp-validation-for="Seller.Phone" class="text-danger"></span>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label asp-for="Seller.DateOfBirth" class="control-label"></label>
+                                    <input asp-for="Seller.DateOfBirth" class="form-control" />
+                                    <span asp-validation-for="Seller.DateOfBirth" class="text-danger"></span>
+                                </div>
+
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Seller.DistrictId, htmlAttributes: new { @class = "control-label " })
+                                    <div class="col-md-12">
+                                        @Html.DropDownListFor(model => model.Seller.DistrictId, new SelectList(Model.Districts, "Id", "Name"), "Select District", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Seller.DistrictId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <input type="submit" name="login-submit" tabindex="4" class="form-control btn btn-default" value="Update">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

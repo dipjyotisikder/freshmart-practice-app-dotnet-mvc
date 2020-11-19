@@ -1,0 +1,32 @@
+﻿@model FreshMart.ViewModels.SellerVM
+
+@using Microsoft.AspNetCore.Identity
+@using FreshMart.Models
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    var data = Model.Sellers.Where(c => c.Email == User.Identity.Name);
+    if (data.SingleOrDefault() != null)
+    {
+
+        var sellerid = Model.Sellers.Where(c => c.Email == User.Identity.Name).Select(c => c.Id).SingleOrDefault();
+        <li>@Html.ActionLink("Add Product", "SellProduct", "Sellers", new { id = sellerid })</li>
+        <li><a asp-action="SellerProducts" asp-controller="Sellers">Your Products</a></li>
+    }
+    else
+    {
+
+        <li> @Html.ActionLink("Be A Seller", "Create", "Sellers")</li>
+    }
+
+}
+else
+{
+    <li>@Html.ActionLink("Be A Seller", "Create", "Sellers")</li>
+
+}

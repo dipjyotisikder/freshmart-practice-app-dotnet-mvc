@@ -1,0 +1,175 @@
+﻿@model FreshMart.Areas.Admin.ViewModels.OrderVM
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_adminlayout.cshtml";
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            All Orders
+        </h1>
+        @if (TempData["payapprove"] != null)
+        {
+            <h3>@TempData["payapprove"]</h3>
+        }
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Tables</a></li>
+            <li class="active">Data tables</li>
+        </ol>
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Hover Data Table</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Total Price</th>
+                                    <th>Order Completed</th>
+                                    <th>Products</th>
+                                    <th>Take Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.Orders)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@item.Email</td>
+                                        <td>@item.TotalPrice</td>
+
+                                        <td>
+                                            @{
+                                                foreach (var agentOrder in Model.AgentOrders)
+                                                {
+                                                    int flag = 0;
+                                                    if (agentOrder.OrderId == item.Id)
+                                                    {
+                                                        flag++;
+                                                    }
+
+                                                    if (flag == 1)
+                                                    {
+                                                        if (agentOrder.IsPaid == true)
+                                                        {
+                                                            <a aria-disabled="True"> Paid</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a aria-disabled="True"> Not-Paid</a>
+                                                        }
+
+
+                                                        if (agentOrder.IsOnRoute == true)
+                                                        {
+                                                            <span>|</span>
+                                                            <a aria-disabled="True"> On Route</a>
+                                                        }
+
+                                                        if (agentOrder.IsFullyCompleted == true)
+                                                        {
+                                                            <span>|</span>
+                                                            <a aria-disabled="True"> Fully Completed</a>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @{
+                                                List<int> proIdList = new List<int>();
+                                                List<int> qtyList = new List<int>();
+
+                                                foreach (var po in Model.ProductOrders)
+                                                {
+                                                    if (po.OrderId == item.Id)
+                                                    {
+                                                        qtyList.Add(po.NumberOfProduct);
+                                                        proIdList.Add(po.ProductId);
+                                                    }
+                                                }
+
+                                            }
+
+                                            @{
+                                                int count = 0;
+                                                int index = 1;
+                                                foreach (var pros in Model.Products)
+                                                {
+
+                                                    foreach (var id in proIdList)
+                                                    {
+                                                        if (pros.Id == id)
+                                                        {
+                                                            <span>@index<span>.</span>@pros.Title | Quantity:@qtyList[count]<br /></span>
+
+                                                            count++;
+                                                            index++;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                        </td>
+                                        <td>
+                                            @{
+                                                foreach (var agentOrder in Model.AgentOrders)
+                                                {
+                                                    int flag = 0;
+                                                    if (agentOrder.OrderId == item.Id)
+                                                    {
+                                                        flag++;
+                                                    }
+
+                                                    if (flag == 1)
+                                                    {
+                                                        if (agentOrder.IsPaid == true)
+                                                        {
+                                                            <a aria-disabled="True"> Paid</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.ActionLink("Appprove Payment", "ConfirmOrder", "OrderManager", new { id = item.Id }, new { @class = "btn btn-default" })
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+
+                                            |
+                                            @Html.ActionLink("Delete", "DeleteConfirmed", "OrderManager", new { id = item.Id })
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>

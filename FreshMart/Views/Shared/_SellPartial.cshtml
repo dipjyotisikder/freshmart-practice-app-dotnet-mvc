@@ -1,0 +1,33 @@
+@model FreshMart.ViewModels.LayoutCategoryViewModel
+@using Microsoft.AspNetCore.Identity
+@using FreshMart.Models
+
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    var data = Model.Sellers.Where(c => c.Email == User.Identity.Name);
+    if (data.SingleOrDefault() != null)
+    {
+        var sellerId = Model.Sellers.Where(c => c.Email == User.Identity.Name).Select(c => c.Id).SingleOrDefault();
+
+        <li>@Html.ActionLink("Sell Now", "Index", "Sellers", new { id = sellerId })</li>
+
+
+    }
+    else
+    {
+        <li> @Html.ActionLink("Be A Seller", "Create", "Sellers")</li>
+    }
+
+
+
+}
+else
+{
+    <li>@Html.ActionLink("Be A Seller", "Create", "Sellers")</li>
+
+}

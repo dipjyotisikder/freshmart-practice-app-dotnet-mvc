@@ -1,0 +1,190 @@
+﻿<!-- FORM -->
+   <!-- Main content -->
+    <section class="content">
+        <div class="row">
+
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Quick Example</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email address</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">File input</label>
+                                <input type="file" id="exampleInputFile">
+
+                                <p class="help-block">Example block-level help text here.</p>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"> Check me out
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+
+
+
+        </div>
+    </section>
+
+    <!--FORM END -->
+
+
+
+
+
+
+//	Agent Create//
+
+        // GET: Admin/Agents/Create
+        //[Route("Admin/Agents/Create")]
+        //public IActionResult Create()
+        //{
+        //    ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Name");
+        //    ViewBag.districts = _context.Districts.ToList();
+        //    return View();
+        //}
+
+
+        //[HttpPost]
+        //[Route("Admin/Agents/Create")]
+        //public IActionResult Create(Agent agent)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var ag = new Agent
+        //        {
+
+        //            Name = agent.Name,
+        //            DistrictId = agent.DistrictId
+        //        };
+
+        //        _context.Agents.Add(ag);
+        //        _context.SaveChanges();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Name", agent.DistrictId);
+        //    return View(agent);
+        //}
+
+
+
+
+
+//		Agent EDIT//
+
+
+
+  // GET: Admin/Agents/Edit/5
+        [HttpGet]
+        [Route("Admin/Agents/Edit/{id}")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var agent = await _context.Agents.SingleOrDefaultAsync(m => m.Id == id);
+            if (agent == null)
+            {
+                return NotFound();
+            }
+            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", agent.DistrictId);
+            ViewBag.agents = _context.Districts.ToList();
+            return View(agent);
+        }
+
+
+        [HttpPost]
+        public IActionResult Edit(int id, Agent agent)
+        {
+            if (id != agent.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Agents.Update(agent);
+                    _context.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AgentExists(agent.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", agent.DistrictId);
+            return View(agent);
+        }
+
+
+
+// any kind of 2 loop iteration//
+
+ @{
+                                                foreach (var agentOrder in Model.AgentOrders)
+                                                {
+                                                    int flag = 0;
+                                                    if (agentOrder.OrderId == item.Id)
+                                                    {
+                                                        flag++;
+                                                    }
+
+                                                    if (flag == 1)
+                                                    {
+                                                        if (agentOrder.IsPaid == true)
+                                                        {
+                                                            <a aria-disabled="True"> Paid</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a aria-disabled="True"> Not-Paid</a>
+                                                        }
+
+
+                                                        if (agentOrder.IsOnRoute == true)
+                                                        {
+                                                            <span>|</span>
+                                                            <a aria-disabled="True"> On Route</a>
+                                                        }
+
+                                                        if (agentOrder.IsFullyCompleted == true)
+                                                        {
+                                                            <span>|</span>
+                                                            <a aria-disabled="True"> Fully Completed</a>
+                                                        }
+                                                    }
+                                                }
+                                            }

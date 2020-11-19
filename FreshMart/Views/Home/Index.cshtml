@@ -1,0 +1,195 @@
+﻿@model FreshMart.ViewModels.ProductViewModel
+
+@{
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- banner -->
+<div class="banner" id="home1">
+    <div class="container">
+        <h3>Fresh food for <span>Fresh Heart</span></h3>
+    </div>
+</div>
+<!-- //banner -->
+
+
+<div class="body-content" style=" margin: 0px;">
+
+    <!-- new-products -->
+    @*<div class="new-products">*@
+
+    <div class="container">
+        <h2 class="text-center" style="color:#ff9659">Our Products</h2>
+
+        <div class="agileinfo_new_products_grids">
+            @{
+                int count = 0;
+            }
+            @foreach (var items in Model.Products)
+            {
+                <div class="col-md-3 agileinfo_new_products_grid">
+                    <div class="agile_ecommerce_tab_left agileinfo_new_products_grid1">
+                        <div class="hs-wrapper hs-wrapper1">
+                            <img src="@items.ImagePath" alt=" " class="img-responsive" />
+                            <div class="w3_hs_bottom w3_hs_bottom_sub">
+                                <ul>
+                                    <li>
+                                        <a href="#" data-toggle="modal" data-target="#myModal_@count">
+                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h5><a href="single.html">Skirts</a></h5>
+                        <div class="simpleCart_shelfItem">
+                            <p> <i class="item_price">@items.Price</i></p>
+                            @*<p><a class="item_add" href="#">Add to cart</a></p>*@
+                            <p><a asp-controller="Cart" asp-action="addtocart" asp-route-id="@items.Id">Add to cart</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                @*This is product detail modal start*@
+
+                <div class="modal video-modal fade" id="myModal_@count" tabindex="-1" role="dialog"
+                     aria-labelledby="myModal6">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <section>
+                                <div class="modal-body">
+                                    <div class="col-md-5 modal_body_left">
+                                        <img src="@items.ImagePath" alt=" " class="img-responsive" />
+                                    </div>
+                                    <div class="col-md-7 modal_body_right">
+                                        <h4>@items.Title</h4>
+                                        <p>
+                                            @items.Description
+                                        </p>
+
+                                        <div class="modal_body_right_cart simpleCart_shelfItem">
+                                            <p> <i class="item_price">$@items.Price</i></p>
+                                            <p><a class="item_add" href="#">Add to cart</a></p>
+                                        </div>
+
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                @*This is product detail modal end*@
+
+                count++;
+
+            }
+
+            @if (Model.Products.Count == 0)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="text-center">
+                            There is no recent products to show
+                        </h5>
+                    </div>
+
+                </div>
+            }
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<!-- //new-products -->
+<!-- top-brands -->
+
+
+@{
+    var pro = Model.Products.Where(c => c.CreatedAt >= (DateTime.Now.AddDays(-5))).ToList();
+    if (pro.Count > 0)
+    {
+        <div class="top-brands">
+            <div class="container">
+                <h3>Recently added Products</h3>
+
+                @{
+
+                    var p = Model.Products.Where(c => c.CreatedAt >= (DateTime.Now.AddDays(-5)));
+                }
+
+                <div class="sliderfig">
+                    <ul id="flexiselDemo1">
+
+                        @foreach (var items in p)
+                        {
+                            <li>
+                                <img src=@items.ImagePath alt=" " class="img-responsive" style="max-height:300px; max-width:300px" />
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+                <script type="text/javascript">
+                    $(window).load(function () {
+                        $("#flexiselDemo1").flexisel({
+                            visibleItems: 4,
+                            animationSpeed: 1000,
+                            autoPlay: true,
+                            autoPlaySpeed: 3000,
+                            pauseOnHover: true,
+                            enableResponsiveBreakpoints: true,
+                            responsiveBreakpoints: {
+                                portrait: {
+                                    changePoint: 480,
+                                    visibleItems: 1
+                                },
+                                landscape: {
+                                    changePoint: 640,
+                                    visibleItems: 2
+                                },
+                                tablet: {
+                                    changePoint: 768,
+                                    visibleItems: 3
+                                }
+                            }
+                        });
+
+                    });
+                </script>
+
+                <script type="text/javascript" src="~/Assets/js/jquery.flexisel.js"></script>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="top-brands">
+            <div class="container">
+                <h3>Recently added Products</h3>
+
+                <div class="row">
+                    <div class="col-md-12">
+                            <h5 class="text-center">
+                                There is no recent products to show
+                            </h5>  
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    }
+
+}
+
+
+<!-- //top-brands -->

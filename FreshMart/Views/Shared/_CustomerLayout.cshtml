@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+<head>
+    <title>Fresh Mart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/x-javascript">
+        addEventListener("load", function() {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <link href="~/Assets/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Assets/css/userStyle.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Assets/css/fasthover.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- js -->
+    <script src="js/jquery.min.js"></script>
+    <!-- //js -->
+    <!-- countdown -->
+    <link rel="stylesheet" href="~/Assets/css/jquery.countdown.css" />
+    <!-- //countdown -->
+    <!-- cart -->
+    <script src="~/Assets/js/simpleCart.min.js"></script>
+    <!-- cart -->
+    <!-- for bootstrap working -->
+    <script type="text/javascript" src="~/Assets/js/bootstrap-3.1.1.min.js"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+                $('html,body').animate({
+                    scrollTop: $(this.hash).offset().top
+                }, 1000);
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <div class="header" id="home1">
+        <div class="container">
+
+            <div class="w3l_logo">
+                <h1><a class="text-center">Customers's Home</a></h1>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="navigation " id="home1">
+        <div class="container">
+            <nav class="navbar navbar-default">
+
+                <div class="navbar-header nav_2">
+                    <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+                    <ul class="nav navbar-nav">
+
+                        <li><a asp-action="Index" asp-controller="Home">FreshMart Home</a></li>
+                        <li><a asp-action="Orders" asp-controller="Customers">Your Orders</a></li>
+
+                        <li><a asp-action="Faq" asp-controller="Home">FAQ's</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- //header -->
+
+
+    @RenderBody()
+
+    <!-- footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="w3_footer_grids">
+                <div class="col-md-6 w3_footer_grid">
+                    <h3>Contact</h3>
+
+                    <ul class="address">
+                        <li>
+                            <i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>1234k Avenue, 4th block,
+                            <span>New York City.</span>
+                        </li>
+                        <li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mail to:freshmart@example.com">info@freshmart.com</a></li>
+                        <li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+1234 567 567</li>
+                    </ul>
+                </div>
+                <div class="col-md-6 w3_footer_grid">
+                    <h3>Information</h3>
+                    <ul class="info">
+                        <li><a asp-action="About" asp-controller="Home">About Us</a></li>
+                        <li><a asp-action="Faq" asp-controller="Home">FAQ's</a></li>
+                        <li><a asp-action="Index" asp-controller="Products">Products</a></li>
+                    </ul>
+                </div>
+
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <div class="footer-copy1">
+                <div class="footer-copy-pos">
+                    <a href="#home1" class="scroll"><img src="~/Assets/images/product_images/arrow.png" alt=" " class="img-responsive" /></a>
+                </div>
+            </div>
+            <div class="container">
+                <p>
+                    &copy; 2019 FreshMart. All rights reserved
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- //footer -->
+
+</body>
+
+</html>

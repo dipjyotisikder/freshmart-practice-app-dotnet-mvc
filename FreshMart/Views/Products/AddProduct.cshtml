@@ -1,0 +1,122 @@
+﻿@model FreshMart.ViewModels.ProductViewModel
+
+@{
+    ViewData["Title"] = "AddProduct";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+
+@*This is the new Code*@
+@*<link href="~/Assets/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Assets/js/bootstrap.min.js"></script>
+    <script src="~/Assets/js/jquery-1.11.1.min.js"></script>*@
+
+
+
+<div class=" addproductbanner">
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-login">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="text-center">
+                                <a href="#" class="active" id="login-form-link">Publish Your Product For Sell</a>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form id="login-form" method="post" enctype="multipart/form-data" asp-controller="Products" asp-action="AddProduct" role="form" style="display: block;">
+
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label asp-for="Product.Title" class="control-label"></label>
+                                        <input asp-for="Product.Title" class="form-control" />
+                                        <span asp-validation-for="Product.Title" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Product.Price" class="control-label"></label>
+                                        <input asp-for="Product.Price" class="form-control" />
+                                        <span asp-validation-for="Product.Price" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Product.Description" class="control-label"></label>
+                                        <input asp-for="Product.Description" class="form-control" />
+                                        <span asp-validation-for="Product.Description" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Product.Unit" class="control-label"></label>
+                                        <input asp-for="Product.Unit" class="form-control" />
+                                        <span asp-validation-for="Product.Unit" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        @Html.DisplayNameFor(model => model.Product.IsPublished)
+                                        @Html.CheckBoxFor(m => m.Product.IsPublished, new { @checked = "checked" })
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Product.ItemInStock" class="control-label"></label>
+                                        <input asp-for="Product.ItemInStock" class="form-control" />
+                                        <span asp-validation-for="Product.ItemInStock" class="text-danger"></span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Product.DistrictId, htmlAttributes: new { @class = "control-label " })
+                                        <div class="col-md-12">
+                                            @Html.DropDownListFor(model => model.Product.DistrictId, new SelectList(Model.District, "Id", "Name"), "Select District", new { @class = "form-control col-md-12" })
+                                            @Html.ValidationMessageFor(model => model.Product.DistrictId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Product.CategoryId, htmlAttributes: new { @class = "control-label " })
+                                        <div class="col-md-12">
+                                            @Html.DropDownListFor(model => model.Product.CategoryId, new SelectList(Model.Category, "Id", "Name"), "Select Category", new { @class = "form-control col-md-12" })
+                                            @Html.ValidationMessageFor(model => model.Product.CategoryId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Product.ImagePath" class="control-label"></label>
+                                        <input asp-for="Product.ImagePath" type="file" Class="form-control" name="file" />
+                                        <span asp-validation-for="Product.ImagePath" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Product.OfferPrice" class="control-label"></label>
+                                        <input asp-for="Product.OfferPrice" class="form-control" />
+                                        <span asp-validation-for="Product.OfferPrice" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Publish Product">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div>
+                                        <a asp-action="Index">Back to Product Home</a>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,174 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <UserSecretsId>aspnet-FreshMart-BBF8E01F-1958-4507-9503-0DA9605F1340</UserSecretsId>
+    <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
+    <ApplicationIcon />
+    <Win32Resource />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\AdminComponents\bower_components\**" />
+    <Content Remove="wwwroot\AdminComponents\bower_components\**" />
+    <EmbeddedResource Remove="wwwroot\AdminComponents\bower_components\**" />
+    <None Remove="wwwroot\AdminComponents\bower_components\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190227182431_init.cs" />
+    <Compile Remove="Migrations\20190227182431_init.Designer.cs" />
+    <Compile Remove="Migrations\20190227182550_init.cs" />
+    <Compile Remove="Migrations\20190227182550_init.Designer.cs" />
+    <Compile Remove="Migrations\20190227190133_init.cs" />
+    <Compile Remove="Migrations\20190227190133_init.Designer.cs" />
+    <Compile Remove="Migrations\20190227191449_init.cs" />
+    <Compile Remove="Migrations\20190227191449_init.Designer.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\AdminComponents\dist\css\AdminLTE.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\adminlte.css.map" />
+    <None Include="wwwroot\AdminComponents\dist\css\AdminLTE.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\adminlte.min.css.map" />
+    <None Include="wwwroot\AdminComponents\dist\css\alt\AdminLTE-bootstrap-social.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\alt\AdminLTE-bootstrap-social.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\alt\AdminLTE-fullcalendar.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\alt\AdminLTE-fullcalendar.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\alt\AdminLTE-select2.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\alt\AdminLTE-select2.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\alt\AdminLTE-without-plugins.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\alt\AdminLTE-without-plugins.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-black-light.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-black-light.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-black.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-black.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-blue-light.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-blue-light.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-blue.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-blue.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-green-light.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-green-light.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-green.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-green.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-purple-light.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-purple-light.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-purple.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-purple.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-red-light.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-red-light.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-red.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-red.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-yellow-light.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-yellow-light.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-yellow.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\skin-yellow.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\_all-skins.css" />
+    <None Include="wwwroot\AdminComponents\dist\css\skins\_all-skins.min.css" />
+    <None Include="wwwroot\AdminComponents\dist\img\avatar.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\avatar04.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\avatar2.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\avatar3.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\avatar5.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\credit\american-express.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\credit\cirrus.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\credit\mastercard.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\credit\mestro.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\credit\paypal.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\credit\paypal2.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\credit\visa.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\default-50x50.gif" />
+    <None Include="wwwroot\AdminComponents\dist\img\icons.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\photo1.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\photo2.png" />
+    <None Include="wwwroot\AdminComponents\dist\img\photo3.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\img\photo4.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\img\user1-128x128.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\img\user2-160x160.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\img\user3-128x128.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\img\user4-128x128.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\img\user5-128x128.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\img\user6-128x128.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\img\user7-128x128.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\img\user8-128x128.jpg" />
+    <None Include="wwwroot\AdminComponents\dist\js\adminlte.js" />
+    <None Include="wwwroot\AdminComponents\dist\js\adminlte.min.js" />
+    <None Include="wwwroot\AdminComponents\dist\js\demo.js" />
+    <None Include="wwwroot\Assets\css\bootstrap.css" />
+    <None Include="wwwroot\Assets\css\fasthover.css" />
+    <None Include="wwwroot\Assets\css\flexslider.css" />
+    <None Include="wwwroot\Assets\css\jquery.countdown.css" />
+    <None Include="wwwroot\Assets\css\popuo-box.css" />
+    <None Include="wwwroot\Assets\css\style.css" />
+    <None Include="wwwroot\Assets\fonts\glyphicons-halflings-regular.eot" />
+    <None Include="wwwroot\Assets\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\Assets\fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="wwwroot\Assets\fonts\glyphicons-halflings-regular.woff" />
+    <None Include="wwwroot\Assets\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\Assets\fonts\glyphicons-halflings-regulard41d.eot" />
+    <None Include="wwwroot\Assets\fonts\webfonts\flexslider-icon-2.html" />
+    <None Include="wwwroot\Assets\fonts\webfonts\flexslider-icon-3.html" />
+    <None Include="wwwroot\Assets\fonts\webfonts\flexslider-icon.html" />
+    <None Include="wwwroot\Assets\fonts\webfonts\flexslider-icond41d.html" />
+    <None Include="wwwroot\Assets\fonts\webfont\flexslider-icon.html" />
+    <None Include="wwwroot\Assets\js\bootstrap-3.1.1.min.js" />
+    <None Include="wwwroot\Assets\js\easyResponsiveTabs.js" />
+    <None Include="wwwroot\Assets\js\imagezoom.js" />
+    <None Include="wwwroot\Assets\js\jquery.countdown.js" />
+    <None Include="wwwroot\Assets\js\jquery.flexisel.js" />
+    <None Include="wwwroot\Assets\js\jquery.flexslider.js" />
+    <None Include="wwwroot\Assets\js\jquery.magnific-popup.js" />
+    <None Include="wwwroot\Assets\js\jquery.min.js" />
+    <None Include="wwwroot\Assets\js\jquery.wmuSlider.js" />
+    <None Include="wwwroot\Assets\js\script.js" />
+    <None Include="wwwroot\Assets\js\simpleCart.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Assets\" />
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="wwwroot\Assets\images\products\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Admin\Views\SellerBuyerManager\RequestIndex.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Admin\Views\SellerBuyerManager\CustomerIndex.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Admin\Views\SellerBuyerManager\SellerIndex.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Home\Faq.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\_AgentLayout.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\_CustomerLayout.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\_SellPartial.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
+</Project>

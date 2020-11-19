@@ -1,0 +1,241 @@
+﻿
+@model FreshMart.ViewModels.ProductViewModel
+
+@{
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+<link href="~/Assets/css/searchbox.css" rel="stylesheet" />
+<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+
+
+@*From Index file*@
+
+
+
+
+<!-- breadcrumbs -->
+<div class="breadcrumb_dress">
+    <div class="container">
+        <ul>
+            <li>
+                <a href="/home/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a>
+                <i>/</i>
+            </li>
+            <li><a href="/home/products">Products</a></li>
+        </ul>
+    </div>
+</div>
+<!-- //breadcrumbs -->
+<!-- dresses -->
+<div class="dresses">
+
+    <div class="w3ls_dresses_grids">
+        <div class="col-md-3 w3ls_dresses_grid_left">
+            <div class="w3ls_dresses_grid_left_grid">
+                <h3>Categories</h3>
+
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                    @*This is category Loop start*@
+                    @{
+                        int ct = 0;
+                    }
+                    @foreach (var domain in Model.DistinctCat)
+                    {
+                        var domainbyid = Model.Category.Where(c => c.Domain == domain).Select(c => c.Id).First();
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <h4 class="panel-title asd">
+                                    <a class="pa_italic" role="button" data-toggle="collapse"
+                                       data-parent="#accordion" href="#collapseOne_@ct" aria-expanded="true"
+                                       aria-controls="collapseOne_@ct">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><i class="glyphicon glyphicon-minus" aria-hidden="true"></i>@domain
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne_@ct" class="panel-collapse collapse in" role="tabpanel"
+                                 aria-labelledby="headingOne" style="background-color:#426f73;">
+                                <div class="panel-body panel_text">
+                                    <ul>
+                                        @{
+                                            var data = Model.Category.Where(c => c.Domain == domain).Select(c => c.Name).ToList();
+                                            foreach (var items in data)
+                                            {
+                                                var ID = Model.Category.Where(c => c.Name == items).Select(c => c.Id).First();
+                                                <li>
+                                                    <i class="fa fa-list"></i>
+                                                    @Html.ActionLink(items, "index", "products", new { id = ID })
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        ct++;
+                    }
+
+
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+        <div class="col-md-9 w3ls_dresses_grid_right">
+                        <div class="clearfix"></div>
+       
+
+            @using (Html.BeginForm("Index", "Products", FormMethod.Post))
+            {
+                <div class="row w3ls_dresses_grid_right_grid2">
+                    <div class=" col-md-8">
+                        <input class="form-control" type="text" asp-for="SearchVm.Text" placeholder="Find Your Products" />
+                    </div>
+                    <div class=" col-md-4">
+                        <button class="btn btn-default" type="submit">Search</button>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <select data-filter="type" asp-for="SearchVm.PriceRange" class="filter-type filter form-control" name="SearchVm.PriceRange">
+                            <option value="null">Select Price Range</option>
+                            <option value="1">0-100</option>
+                            <option value="2">100-200</option>
+                            <option value="3">200-300</option>
+                            <option value="4">300-400</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+
+                        @Html.DropDownListFor(model => model.SearchVm.DistrictId, new SelectList(Model.District, "Id", "Name"), "Choose Your District", new { @class = "select_item ", style = "min-width: 300px;" })
+
+                    </div>
+
+
+                    <div class="clearfix"></div>
+                </div>
+            }
+
+            <div class="w3ls_dresses_grid_right_grid3">
+
+                @{
+                    int count = 0;
+                    foreach (var item in Model.Products)
+                    {
+                        @if (@item.ItemInStock < 1)
+                        {
+                            continue;
+                        }
+
+                        <div class="col-md-4  ">
+                            <div class="agile_ecommerce_tab_left dresses_grid">
+                                <div class="hs-wrapper hs-wrapper2">
+
+                                    <img src="@item.ImagePath" alt=" " class="img-responsive" />
+
+                                    <div class="w3_hs_bottom w3_hs_bottom_sub1">
+                                        <ul>
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target="#myModal_@count">
+                                                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <h5>@item.Title</h5>
+                                <div class="simpleCart_shelfItem">
+                                    <p><i class="item_price">@item.Price</i></p>
+                                    <p><i class="item_price">@item.ItemInStock</i></p>
+                                    @* <p><span>$420</span> <i class="item_price">$340</i></p> *@
+                                    <p><a asp-controller="Cart" asp-action="addtocart" asp-route-id="@item.Id">Add to cart</a></p>
+                                </div>
+                                <div class="dresses_grid_pos">
+                                    <h6>New</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal video-modal fade" id="myModal_@count" tabindex="-1" role="dialog"
+                             aria-labelledby="myModal6">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <section>
+                                        <div class="modal-body">
+                                            <div class="col-md-5 modal_body_left">
+                                                <img src="@item.ImagePath" alt=" " class="img-responsive" />
+                                            </div>
+                                            <div class="col-md-7 modal_body_right">
+                                                <h4>@item.Title</h4>
+                                                <p>
+                                                    @item.Description
+
+                                                </p>
+                                                <div class="rating">
+                                                    <div class="rating-left">
+                                                        <img src="images/star-.png" alt=" " class="img-responsive" />
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="modal_body_right_cart simpleCart_shelfItem">
+                                                    <p> <i class="item_price">@item.Price</i></p>
+                                                    <p><a asp-controller="Cart" asp-action="addtocart" asp-route-id="@item.Id">Add to cart</a></p>
+                                                </div>
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                        count++;
+
+                    }
+
+                }
+
+
+
+                <div class="clearfix"></div>
+            </div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+</div>
+
+
+
+@{
+
+    List<Product> dataList = Model.BaseProduct.Where(c => c.CreatedAt >= (DateTime.Now.AddDays(-2))).ToList();
+    if (dataList.Count > 0)
+    {
+        Html.RenderPartial("_RecentProduct");
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12">
+                    <h5 class="text-center">
+                        There is no recent products to show
+                    </h5>
+            </div>
+        </div>
+
+    }
+}

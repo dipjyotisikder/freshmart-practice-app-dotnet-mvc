@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html charset=UTF-8>
+<head>
+    <title>Fresh Mart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/x-javascript">
+        addEventListener("load", function () {
+               setTimeout(hideURLbar, 0);
+           }, false);
+           function hideURLbar() {
+               window.scrollTo(0, 1);
+           } </script>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/Assets/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Assets/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Assets/css/fasthover.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- js -->
+    <script src="~/Assets/js/jquery.min.js"></script>
+    <!-- //js -->
+    <!-- countdown -->
+    <link rel="stylesheet" href="~/Assets/js/jquery.countdown.js" />
+    <!-- //countdown -->
+    <!-- cart -->
+    <script src="~/Assets/js/simpleCart.min.js"></script>
+    <!-- cart -->
+    <!-- for bootstrap working -->
+    <script type="text/javascript" src="~/Assets/js/bootstrap-3.1.1.min.js"></script>
+    <!-- //for bootstrap working -->
+
+    <!-- //end-smooth-scrolling -->
+    <script src="~/Assets/js/bootstrap.min.js"></script>
+    <script src="~/Assets/js/jquery-1.11.1.min.js"></script>
+    <link href="~/Assets/css/form.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        @RenderBody()
+    </div>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

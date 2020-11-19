@@ -1,0 +1,79 @@
+﻿@model FreshMart.ViewModels.SellerVM
+
+@{
+    Layout = "~/Views/Shared/_SellerLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-login">
+                <div class="panel-heading">
+                    <h2 class="text-center green"> Request To Admin !</h2>
+
+
+                    <span class="text-danger"> @Model.Error</span>
+
+
+
+
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <form id="login-form" method="post" asp-controller="Sellers" asp-action="RequestForSell" role="form">
+
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <div class="form-group">
+                                    @*<label asp-for="SellerRequest.SellerName" class="control-label"></label>*@
+                                    <label class="control-label">Your Name</label>
+                                    <input asp-for="SellerRequest.SellerName" placeholder="Please provide a name as seller" class="form-control" />
+                                    <span asp-validation-for="SellerRequest.SellerName" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    @*<label asp-for="SellerRequest.CompanyName" class="control-label"></label>*@
+                                    <label class="control-label">Company Name</label>
+                                    <input asp-for="SellerRequest.CompanyName" placeholder="Please provide your company name" class="form-control" />
+                                    <span asp-validation-for="SellerRequest.CompanyName" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    @*<label asp-for="SellerRequest.Phone" class="control-label"></label>*@
+                                    <label class="control-label">Phone</label>
+                                    <input asp-for="SellerRequest.Phone" placeholder="Please provide your phone number" class="form-control" />
+                                    <span asp-validation-for="SellerRequest.Phone" class="text-danger"></span>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label">Date of Birth</label>
+                                    @*<label asp-for="SellerRequest.DateOfBirth" class="control-label"></label>*@
+                                    <input asp-for="SellerRequest.DateOfBirth" placeholder="Please provide your date of birth" class="form-control" />
+                                    <span asp-validation-for="SellerRequest.DateOfBirth" class="text-danger"></span>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label">District</label>
+                                        @Html.DropDownListFor(model => model.SellerRequest.DistrictId, new SelectList(Model.Districts, "Id", "Name"), "Please select your district name", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.SellerRequest.DistrictId, "", new { @class = "text-danger" })
+                                    
+                                </div>
+
+
+                                <div class="form-group">
+                                        <button class="btn btn-primary" type="submit" name="login-submit" id="login-submit">Be a seller !</button>
+                                     
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
