@@ -16,7 +16,7 @@ namespace FreshMart.ViewModels
 
         public SellerRequest SellerRequest { get; set; }
 
-        public SearchVM SearchVm { get; set; }
+        public SearchViewModel SearchVm { get; set; }
 
 
     }

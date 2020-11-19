@@ -39,7 +39,7 @@ namespace FreshMart.Controllers
                 return NotFound();
             }
 
-            var vm = new SellerVM
+            var vm = new SellerViewModel
             {
                 Seller = _context.Sellers.Find(id),
                 Districts = _context.Districts.ToList(),
@@ -85,7 +85,7 @@ namespace FreshMart.Controllers
 
         [HttpPost]
         [Route("Sellers/Update/{id}")]
-        public IActionResult Update(int? id, SellerVM sellerVm)
+        public IActionResult Update(int? id, SellerViewModel model)
         {
             if (id == null)
             {
@@ -99,7 +99,7 @@ namespace FreshMart.Controllers
             }
 
 
-            if (id != sellerVm.Seller.Id)
+            if (id != model.Seller.Id)
             {
                 return NotFound();
             }
@@ -108,12 +108,13 @@ namespace FreshMart.Controllers
             {
                 try
                 {
-                    _context.Sellers.Update(sellerVm.Seller);
+                    sellerChk = model.Seller;
+                    //_context.Sellers.Update(model.Seller);
                     _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SellerExists(sellerVm.Seller.Id))
+                    if (!SellerExists(model.Seller.Id))
                     {
                         return NotFound();
                     }
@@ -125,9 +126,9 @@ namespace FreshMart.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", sellerVm.Seller.DistrictId);
+            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", model.Seller.DistrictId);
 
-            return View(sellerVm.Seller);
+            return View(model.Seller);
         }
 
 
@@ -136,7 +137,7 @@ namespace FreshMart.Controllers
         [Route("Sellers/Create")]
         public IActionResult Create()
         {
-            var vm = new SellerVM
+            var vm = new SellerViewModel
             {
                 Districts = _context.Districts.ToList(),
                 Sellers = _context.Sellers.ToList()
@@ -149,39 +150,37 @@ namespace FreshMart.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("Sellers/RequestForSell")]
-        public async Task<ActionResult> RequestForSell(SellerVM sellerVm)
+        [Route("Sellers/request")]
+        public async Task<ActionResult> SellerRequest(SellerViewModel model)
         {
             var emailCheck = _context.SellerRequests.Where(c => c.Email == User.Identity.Name);
             if (emailCheck.ToList().Count > 0)
             {
 
                 ViewBag.err = "You have already requested. You will approved soon!";
-                var vm = new SellerVM
+                var vm = new SellerViewModel
                 {
                     Districts = _context.Districts.ToList(),
                     Sellers = _context.Sellers.ToList(),
                     Error = ViewBag.err
                 };
-
-
                 return View("Create", vm);
             }
 
-            if (sellerVm.SellerRequest.SellerName == null)
+            if (model.SellerRequest.SellerName == null)
             {
-                ModelState.AddModelError("sellerVm.SellerRequest.SellerName", "Please enter seller name");
+                ModelState.AddModelError("SellerRequest.SellerName", "Please enter seller name");
             }
 
-            if (sellerVm.SellerRequest.DateOfBirth == null)
+            if (model.SellerRequest.DateOfBirth == null)
             {
-                ModelState.AddModelError("sellerVm.SellerRequest.DateOfBirth", "Please enter date of birth");
+                ModelState.AddModelError("SellerRequest.DateOfBirth", "Please enter date of birth");
             }
 
 
-            if (sellerVm.SellerRequest.SellerName == null || sellerVm.SellerRequest.DateOfBirth == null)
+            if (model.SellerRequest.SellerName == null || model.SellerRequest.DateOfBirth == null)
             {
-                var vm = new SellerVM
+                var vm = new SellerViewModel
                 {
                     Districts = _context.Districts.ToList(),
                     Sellers = _context.Sellers.ToList(),
@@ -193,24 +192,23 @@ namespace FreshMart.Controllers
             {
                 var vm = new SellerRequest
                 {
-                    SellerName = sellerVm.SellerRequest.SellerName,
+                    SellerName = model.SellerRequest.SellerName,
                     Email = User.Identity.Name,
-                    Phone = sellerVm.SellerRequest.Phone,
-                    DistrictId = sellerVm.SellerRequest.DistrictId,
-                    DateOfBirth = sellerVm.SellerRequest.DateOfBirth,
-                    CompanyName = sellerVm.SellerRequest.CompanyName
+                    Phone = model.SellerRequest.Phone,
+                    DistrictId = model.SellerRequest.DistrictId,
+                    DateOfBirth = model.SellerRequest.DateOfBirth,
+                    CompanyName = model.SellerRequest.CompanyName
                 };
 
                 _context.SellerRequests.Add(vm);
                 await _context.SaveChangesAsync();
             }
-            var vms = new SellerVM
+            var vms = new SellerViewModel
             {
                 Districts = _context.Districts.ToList(),
                 Sellers = _context.Sellers.ToList(),
                 Error = "Your request has been sent! Wait for approval."
             };
-
             return RedirectToAction("Create", "Sellers", vms);
         }
 
@@ -219,7 +217,6 @@ namespace FreshMart.Controllers
         [Route("Seller/SellProduct/{id}")]
         public ActionResult SellProduct(int? id)
         {
-
             if (id == null)
             {
                 return NotFound();
@@ -237,7 +234,7 @@ namespace FreshMart.Controllers
             {
                 NotFound();
             }
-            var vm = new SellerVM
+            var vm = new SellerViewModel
             {
                 Products = _context.Products.Where(c => c.SellerId == id).ToList(),
                 Districts = _context.Districts.ToList(),
@@ -249,7 +246,7 @@ namespace FreshMart.Controllers
 
         [HttpPost]
         [Route("Seller/SellProduct/{id}")]
-        public ActionResult SellProduct(int id, IFormFile file, SellerVM vm)
+        public ActionResult SellProduct(int id, IFormFile file, SellerViewModel vm)
         {
             if (id == 0)
             {
@@ -274,15 +271,15 @@ namespace FreshMart.Controllers
             }
             if (vm.Product.Price == 0)
             {
-                ModelState.AddModelError("Product.Price", "Please enter Price");
+                ModelState.AddModelError("Product.Price", "Please enter price");
             }
             if (vm.Product.ItemInStock == 0)
             {
-                ModelState.AddModelError("Product.ItemInStock", "Please enter ItemInStock");
+                ModelState.AddModelError("Product.ItemInStock", "Please enter itemInStock");
             }
             if (vm.Product.Unit == null)
             {
-                ModelState.AddModelError("Product.Unit", "Please enter Unit");
+                ModelState.AddModelError("Product.Unit", "Please enter unit");
             }
 
             if (vm.Product.Title == null
@@ -290,7 +287,7 @@ namespace FreshMart.Controllers
                 || vm.Product.ItemInStock == 0
                 || vm.Product.Unit == null)
             {
-                var vmfinal = new SellerVM
+                var vmfinal = new SellerViewModel
                 {
                     Products = _context.Products.Where(c => c.SellerId == id).ToList(),
                     Districts = _context.Districts.ToList(),
@@ -304,7 +301,7 @@ namespace FreshMart.Controllers
             var Seller = _context.Sellers.Where(s => s.Email.Contains(User.Identity.Name));
             if (Seller.SingleOrDefault() == null)
             {
-                return RedirectToAction("RequestForSell", "Products", new { id = id });
+                return RedirectToAction("request", "Products", new { id = id });
             }
 
 
@@ -339,7 +336,7 @@ namespace FreshMart.Controllers
             _context.Products.Add(products);
             _context.SaveChanges();
 
-            var vms = new SellerVM
+            var vms = new SellerViewModel
             {
                 Products = _context.Products.Where(c => c.SellerId == id).ToList(),
                 Districts = _context.Districts.ToList(),
@@ -367,7 +364,7 @@ namespace FreshMart.Controllers
             }
 
             var prosList = _context.Products.Where(c => c.SellerId == id).ToList();
-            var vm = new SellerVM
+            var vm = new SellerViewModel
             {
                 Products = prosList,
                 Sellers = _context.Sellers.ToList(),

@@ -1,4 +1,4 @@
-﻿@model FreshMart.ViewModels.SellerVM
+﻿@model FreshMart.ViewModels.SellerViewModel
 
 @{
     Layout = "~/Views/Shared/_SellerLayout.cshtml";
@@ -22,7 +22,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <form id="login-form" method="post" asp-controller="Sellers" asp-action="RequestForSell" role="form">
+                            <form id="login-form" method="post" asp-controller="Sellers" asp-action="request" role="form">
 
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -58,15 +58,15 @@
 
                                 <div class="form-group">
                                     <label class="control-label">District</label>
-                                        @Html.DropDownListFor(model => model.SellerRequest.DistrictId, new SelectList(Model.Districts, "Id", "Name"), "Please select your district name", new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.SellerRequest.DistrictId, "", new { @class = "text-danger" })
-                                    
+                                    @Html.DropDownListFor(model => model.SellerRequest.DistrictId, new SelectList(Model.Districts, "Id", "Name"), "Please select your district name", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.SellerRequest.DistrictId, "", new { @class = "text-danger" })
+
                                 </div>
 
 
                                 <div class="form-group">
-                                        <button class="btn btn-primary" type="submit" name="login-submit" id="login-submit">Be a seller !</button>
-                                     
+                                    <button class="btn btn-primary" type="submit" name="login-submit" id="login-submit">Be a seller</button>
+
                                 </div>
                             </form>
 

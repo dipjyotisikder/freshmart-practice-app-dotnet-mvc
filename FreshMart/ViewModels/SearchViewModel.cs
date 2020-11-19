@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FreshMart.ViewModels
 {
-    public class SearchVM
+    public class SearchViewModel
     {
         public string Text { get; set; }
 

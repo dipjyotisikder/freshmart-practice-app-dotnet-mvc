@@ -1,68 +1,73 @@
-﻿@model FreshMart.ViewModels.SellerVM
+﻿@model FreshMart.ViewModels.SellerViewModel
 
 @{
     ViewData["Title"] = "SellerProducts";
     Layout = "~/Views/Shared/_SellerLayout.cshtml";
 }
 
-<h2>Sellers Products</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Product.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product.Price)
-            </th>
+<div class="container">
+    <h2>Sellers Products</h2>
 
-
-            @* <th> *@
-            @*     @Html.DisplayNameFor(model => model.IsPublished) *@
-            @* </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Product.ItemInStock)
-            </th>
-
-
-
-            <th>
-                @Html.DisplayNameFor(model => model.Product.Category)
-            </th>
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Products)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-
-                @* <td> *@
-                @*     @Html.DisplayFor(modelItem => item.IsPublished) *@
-                @* </td> *@
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemInStock)
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Product.Price)
+                </th>
 
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
-                </td>
+                @* <th> *@
+                @*     @Html.DisplayNameFor(model => model.IsPublished) *@
+                @* </th> *@
+                <th>
+                    @Html.DisplayNameFor(model => model.Product.ItemInStock)
+                </th>
 
-                @* <td> *@
-                @*     $1$ <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | #1# *@
-                @*     <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
-                @*     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
-                @* </td> *@
+
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Product.Category)
+                </th>
+
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Products)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+
+                    @* <td> *@
+                    @*     @Html.DisplayFor(modelItem => item.IsPublished) *@
+                    @* </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemInStock)
+                    </td>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    </td>
+
+                    @* <td> *@
+                    @*     $1$ <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | #1# *@
+                    @*     <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
+                    @*     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
+                    @* </td> *@
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

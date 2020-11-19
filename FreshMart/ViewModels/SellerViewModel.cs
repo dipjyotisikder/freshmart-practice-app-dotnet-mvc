@@ -7,7 +7,7 @@ using FreshMart.Models;
 
 namespace FreshMart.ViewModels
 {
-    public class SellerVM
+    public class SellerViewModel
     {
         public Seller Seller { get; set; }
         public List<Seller> Sellers { get; set; }

@@ -33,20 +33,10 @@ namespace Imgloo.Seeder
                                .SetBasePath(Directory.GetCurrentDirectory())
                                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                                .AddJsonFile($"appsettings.{envName}.json", optional: true)
-                               //.AddEnvironmentVariables()
+                               .AddEnvironmentVariables()
                                .Build();
 
             defaultConnection = configuration.GetConnectionString("DefaultConnection");
-
-            //if (env == "1")
-            //{
-            //    defaultConnection = Constants.CONNECTION_STRING.LocalValue;
-            //}
-            //else if (env == "2")
-            //{
-            //    defaultConnection = Constants.CONNECTION_STRING.ProductionValue;
-            //}
-
 
 
             builder.UseSqlServer(defaultConnection);
@@ -56,10 +46,7 @@ namespace Imgloo.Seeder
                 Console.WriteLine("Choose from below:");
                 Console.WriteLine("1. Category");
                 Console.WriteLine("00. Seed All");
-                //Console.WriteLine("2. Tag");
-                //Console.WriteLine("3. DocumentType");
-                //Console.WriteLine("4. Privacy");
-                //Console.WriteLine("5. Genders");
+
 
                 var command = Console.ReadLine();
                 var startSeed = new SeederConcrete(context);
@@ -75,23 +62,10 @@ namespace Imgloo.Seeder
                 {
                     //add all seeder here
                     startSeed.GoCat();
-
                 }
-                //else if (command == "3")
-                //{
-                //    var res = startSeed.SeedDocumentType();
-                //    Console.WriteLine(res);
-                //}
-                //else if (command == "4")
-                //{
-                //    var res = startSeed.SeedPrivacy();
-                //    Console.WriteLine(res);
-                //}
-                //else if (command == "5")
-                //{
-                //    var res = startSeed.SeedGenders();
-                //    Console.WriteLine(res);
-                //}
+
+
+
 
                 Console.WriteLine("Press 1 for again: ");
                 var again = Console.ReadLine();

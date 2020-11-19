@@ -1,4 +1,4 @@
-﻿@model FreshMart.ViewModels.SellerVM
+﻿@model FreshMart.ViewModels.SellerViewModel
 @{
     ViewData["Title"] = "SellProduct";
     Layout = "~/Views/Shared/_SellerLayout.cshtml";
@@ -14,7 +14,7 @@
                             <h3 class="text-green">@Model.Error</h3>
                             @if (TempData["uploaderr"] != null)
                             {
-                                <h3 class="text-danger">@TempData["uploaderr"] </h3>
+                            <h3 class="text-danger">@TempData["uploaderr"] </h3>
                             }
 
 

@@ -44,7 +44,7 @@ namespace FreshMart.Controllers
 
 
         [Route("Products/Index/{SearchVM?}")]
-        public IActionResult Index(SearchVM searchVm)
+        public IActionResult Index(SearchViewModel searchVm)
         {
             CartService cs = new CartService(_httpContextAccessor, _context);
 

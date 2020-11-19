@@ -25,6 +25,7 @@ namespace Imgloo.seeder
             };
             var cats = _context.Categories.ToList();
             var selected = categories.Where(x => !cats.Select(y => y.Name).Contains(x.Name)).ToList();
+
             _context.AddRangeAsync(selected);
             var res = _context.SaveChangesAsync();
             if (res.Result > 0)
