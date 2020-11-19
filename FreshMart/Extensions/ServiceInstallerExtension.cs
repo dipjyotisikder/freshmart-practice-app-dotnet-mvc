@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using MediatR;
+using FreshMart.Models.Queries;
+using FreshMart.Services.QueryHandler;
 
 namespace FreshMart.Extensions
 {
@@ -41,6 +44,8 @@ namespace FreshMart.Extensions
 
             services.AddDistributedMemoryCache();
 
+            services.AddMediatR(typeof(ProductQueryHandler));
+
 
             services.AddSession(options =>
             {
@@ -50,10 +55,11 @@ namespace FreshMart.Extensions
             });
             //for session
 
-
             services.AddSession();
             services.AddMemoryCache();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
 
             return services;
         }

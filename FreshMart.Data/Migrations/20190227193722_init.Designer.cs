@@ -20,7 +20,7 @@ namespace FreshMart.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FreshMart.Areas.Admin.Models.SellerRequest", b =>
+            modelBuilder.Entity("FreshMart.Models.SellerRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -444,7 +444,7 @@ namespace FreshMart.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("FreshMart.Areas.Admin.Models.SellerRequest", b =>
+            modelBuilder.Entity("FreshMart.Models.SellerRequest", b =>
                 {
                     b.HasOne("FreshMart.Models.District", "District")
                         .WithMany("SellerRequest")

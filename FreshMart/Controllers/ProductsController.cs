@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using FreshMart.Database;
 using FreshMart.Helper;
 using FreshMart.Models;
+using FreshMart.Models.Queries;
 using FreshMart.Models.ViewModels;
 using FreshMart.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,13 +28,20 @@ namespace FreshMart.Controllers
         private CartService cs;
         private ProductService ps;
 
-        public ProductsController(ApplicationDbContext con, IHostingEnvironment appEnvironment, IHttpContextAccessor httpContextAccessor)
+
+        private readonly IMediator _mediator;
+
+        public ProductsController(ApplicationDbContext con,
+            IHostingEnvironment appEnvironment,
+            IHttpContextAccessor httpContextAccessor,
+            IMediator mediator)
         {
             _context = con;
             environment = appEnvironment;
             _httpContextAccessor = httpContextAccessor;
             cs = new CartService(httpContextAccessor, _context);
             ps = new ProductService(httpContextAccessor, _context);
+            _mediator = mediator;
         }
 
         protected override void Dispose(bool disposing)
@@ -41,85 +50,11 @@ namespace FreshMart.Controllers
         }
 
 
-
         [Route("Products/Index/{SearchVM?}")]
-        public IActionResult Index(SearchViewModel searchVm)
+        public async Task<ViewResult> Index(GetAllProductQuery query)
         {
-            CartService cs = new CartService(_httpContextAccessor, _context);
-
-            var cartCount = cs.GetCartCount();
-            Torce torce = new Torce(_context);
-
-            //            000
-            if (searchVm.Text != null && searchVm.PriceRange != null && searchVm.DistrictId != null)
-            {
-                this.product = torce.SearchProducts(searchVm.Text, searchVm.PriceRange, searchVm.DistrictId);
-            }
-
-            //            001
-            if (searchVm.Text != null && searchVm.PriceRange != null && searchVm.DistrictId == null)
-            {
-
-                this.product = torce.SearchProducts(searchVm.Text, searchVm.PriceRange);
-            }
-            //            010
-            if (searchVm.Text != null && searchVm.PriceRange == null && searchVm.DistrictId != null)
-            {
-                this.product = torce.SearchProducts(searchVm.Text, searchVm.DistrictId);
-            }
-
-            //            011
-            if (searchVm.Text != null && searchVm.PriceRange == null && searchVm.DistrictId == null)
-            {
-                this.product = torce.SearchProducts(searchVm.Text);
-            }
-
-            //            100
-            if (searchVm.Text == null && searchVm.PriceRange != null && searchVm.DistrictId != null)
-            {
-
-                this.product = torce.SearchProducts2(searchVm.PriceRange, searchVm.DistrictId);
-            }
-
-
-            //            101
-            if (searchVm.Text == null && searchVm.PriceRange != null && searchVm.DistrictId == null)
-            {
-
-                this.product = torce.SearchProducts2(searchVm.PriceRange);
-            }
-            //            110
-            if (searchVm.Text == null && searchVm.PriceRange == null && searchVm.DistrictId != null)
-            {
-
-                this.product = torce.SearchProducts3(searchVm.DistrictId);
-            }
-
-            if (searchVm.Text == null && searchVm.PriceRange == null && searchVm.DistrictId == null)
-            {
-                this.product = torce.SearchProducts();
-            }
-
-
-            var categories = ps.GetAllCategories();
-            var districts = ps.GetAllDistricts();
-            var domains = ps.GetCategoryByDomain();
-            var totalPrice = cs.GetCartTotalPrice();
-
-
-
-            var productView = new ProductViewModel
-            {
-                Products = this.product,
-                Category = categories,
-                District = districts,
-                DistinctCat = domains,
-                BaseProduct = this.product,  //it will always remain same as it is inherited
-                CartCount = cartCount,
-                TotalPrice = totalPrice,
-                Sellers = _context.Sellers.ToList()
-            };
-            return View(productView);
+            var result = await _mediator.Send(query);
+            return View(result);
         }
 
 
