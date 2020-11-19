@@ -15,17 +15,6 @@
     <None Remove="wwwroot\AdminComponents\bower_components\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20190227182431_init.cs" />
-    <Compile Remove="Migrations\20190227182431_init.Designer.cs" />
-    <Compile Remove="Migrations\20190227182550_init.cs" />
-    <Compile Remove="Migrations\20190227182550_init.Designer.cs" />
-    <Compile Remove="Migrations\20190227190133_init.cs" />
-    <Compile Remove="Migrations\20190227190133_init.Designer.cs" />
-    <Compile Remove="Migrations\20190227191449_init.cs" />
-    <Compile Remove="Migrations\20190227191449_init.Designer.cs" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
@@ -145,6 +134,12 @@
     <Folder Include="Areas\Admin\Assets\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="wwwroot\Assets\images\products\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FreshMart.Core\FreshMart.Core.csproj" />
+    <ProjectReference Include="..\FreshMart.Data\FreshMart.Data.csproj" />
+    <ProjectReference Include="..\FreshMart.Services\FreshMart.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

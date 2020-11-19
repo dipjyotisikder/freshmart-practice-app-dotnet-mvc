@@ -5,7 +5,7 @@ using Imgloo.seeder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using FreshMart.Data;
+using FreshMart.Database;
 
 namespace Imgloo.Seeder
 {

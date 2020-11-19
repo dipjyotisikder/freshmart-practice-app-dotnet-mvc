@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FreshMart.Areas.Admin.ViewModels;
+using FreshMart.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FreshMart.Areas.Admin.Controllers

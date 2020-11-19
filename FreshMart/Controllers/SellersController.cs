@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FreshMart.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FreshMart.Data;
 using FreshMart.Models;
-using FreshMart.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using FreshMart.Helper;
 using Microsoft.AspNetCore.Hosting;
+using FreshMart.Database;
+using FreshMart.Models.ViewModels;
 
 namespace FreshMart.Controllers
 {

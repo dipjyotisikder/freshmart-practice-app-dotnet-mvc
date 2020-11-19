@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FreshMart.Data;
+using FreshMart.Core;
+using FreshMart.Database;
 using FreshMart.Helper;
 using FreshMart.Models;
+using FreshMart.Models.ViewModels;
 using FreshMart.Services;
-using FreshMart.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

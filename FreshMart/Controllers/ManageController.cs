@@ -11,8 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using FreshMart.Models;
-using FreshMart.Models.ManageViewModels;
+
 using FreshMart.Services;
+using FreshMart.Models.ViewModels;
 
 namespace FreshMart.Controllers
 {

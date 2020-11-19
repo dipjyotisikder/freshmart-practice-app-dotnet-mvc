@@ -5,7 +5,15 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreshMart", "FreshMart\FreshMart.csproj", "{1BBB3651-7397-436A-A18B-AC30A174F8A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreshMart.Seeder", "FreshMart.Seeder\FreshMart.Seeder.csproj", "{6A516B44-2E88-4B65-A99D-171895BC7F30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreshMart.Seeder", "FreshMart.Seeder\FreshMart.Seeder.csproj", "{6A516B44-2E88-4B65-A99D-171895BC7F30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreshMart.Services", "FreshMart.Services\FreshMart.Services.csproj", "{F31EC36E-3A4D-4D94-8F0B-67D03362B46D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Freshmart.Models", "Freshmart.Models\Freshmart.Models.csproj", "{6AF04330-6525-4D8A-97DA-989B4BEE863D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreshMart.Data", "FreshMart.Data\FreshMart.Data.csproj", "{DA14CE92-8B66-44D5-A413-06949DADB3CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreshMart.Core", "FreshMart.Core\FreshMart.Core.csproj", "{7728482B-574F-4D3F-9249-0CAEEA131048}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,22 @@ Global
 		{6A516B44-2E88-4B65-A99D-171895BC7F30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A516B44-2E88-4B65-A99D-171895BC7F30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A516B44-2E88-4B65-A99D-171895BC7F30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F31EC36E-3A4D-4D94-8F0B-67D03362B46D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31EC36E-3A4D-4D94-8F0B-67D03362B46D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31EC36E-3A4D-4D94-8F0B-67D03362B46D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31EC36E-3A4D-4D94-8F0B-67D03362B46D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AF04330-6525-4D8A-97DA-989B4BEE863D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AF04330-6525-4D8A-97DA-989B4BEE863D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AF04330-6525-4D8A-97DA-989B4BEE863D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AF04330-6525-4D8A-97DA-989B4BEE863D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA14CE92-8B66-44D5-A413-06949DADB3CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA14CE92-8B66-44D5-A413-06949DADB3CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA14CE92-8B66-44D5-A413-06949DADB3CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA14CE92-8B66-44D5-A413-06949DADB3CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7728482B-574F-4D3F-9249-0CAEEA131048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7728482B-574F-4D3F-9249-0CAEEA131048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7728482B-574F-4D3F-9249-0CAEEA131048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7728482B-574F-4D3F-9249-0CAEEA131048}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

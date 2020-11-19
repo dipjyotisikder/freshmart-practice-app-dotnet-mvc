@@ -5,12 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FreshMart.Models;
-using FreshMart.Data;
 using Microsoft.EntityFrameworkCore;
-using FreshMart.ViewModels;
 using FreshMart.Helper;
 using Microsoft.AspNetCore.Http;
 using FreshMart.Services;
+using FreshMart.Database;
+using FreshMart.Models.ViewModels;
+using FreshMart.Core;
 
 namespace FreshMart.Controllers
 {
