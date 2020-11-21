@@ -59,11 +59,11 @@ namespace FreshMart.Controllers
 
             var products = _context.Products
                .Include(c => c.Category)
-               .Include(c => c.District)
+               .Include(c => c.District).AsNoTracking()
                .ToList();
-            var categories = _context.Categories.ToList();
-            var districts = _context.Districts.ToList();
-            var domains = _context.Categories.Select(c => c.Domain).Distinct().ToList();
+            var categories = _context.Categories.AsNoTracking().ToList();
+            var districts = _context.Districts.AsNoTracking().ToList();
+            var domains = _context.Categories.Select(c => c.Domain).Distinct().AsNoTracking().ToList();
 
 
             var productView = new ProductViewModel
@@ -75,8 +75,8 @@ namespace FreshMart.Controllers
                 CartCount = this.cartCount,
                 TotalPrice = cs.GetCartTotalPrice(),
                 Message = a,
-                Sellers = _context.Sellers.ToList(),
-                Customers = _context.Customers.ToList(),
+                Sellers = _context.Sellers.AsNoTracking().ToList(),
+                Customers = _context.Customers.AsNoTracking().ToList(),
 
             };
 

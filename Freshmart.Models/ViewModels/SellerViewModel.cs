@@ -20,7 +20,7 @@ namespace FreshMart.Models.ViewModels
 
         public SellerRequest SellerRequest { get; set; }
 
-
+        public string Success { get; set; }
         public string Error { get; set; }
     }
 }

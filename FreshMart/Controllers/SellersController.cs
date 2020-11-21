@@ -12,6 +12,8 @@ using FreshMart.Helper;
 using Microsoft.AspNetCore.Hosting;
 using FreshMart.Database;
 using FreshMart.Models.ViewModels;
+using FreshMart.Models.Commands;
+using MediatR;
 
 namespace FreshMart.Controllers
 {
@@ -20,31 +22,30 @@ namespace FreshMart.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _environment;
+        private readonly IMediator _mediator;
 
-        public SellersController(ApplicationDbContext context, IHostingEnvironment env)
+
+        public SellersController(ApplicationDbContext context,
+            IHostingEnvironment env,
+            IMediator mediator)
         {
             _context = context;
             _environment = env;
+            _mediator = mediator;
         }
 
         // GET: Sellers
         [Route("Sellers/{id}")]
-        public IActionResult Index(int id)
+        public ViewResult Index(int id, SellerViewModel model)
         {
-            var sellerChk = _context.Sellers.Find(id);
-
-            if (User.Identity.Name != sellerChk.Email)
-            {
-                return NotFound();
-            }
-
             var vm = new SellerViewModel
             {
-                Seller = _context.Sellers.Find(id),
-                Districts = _context.Districts.ToList(),
-                Sellers = _context.Sellers.ToList()
+                Seller = model.Seller == null ? _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefault() : model.Seller,
+                Districts = model.Districts == null || model.Districts.Count == 0 ? _context.Districts.AsNoTracking().ToList() : model.Districts,
+                Sellers = model.Sellers == null || model.Sellers.Count == 0 ? _context.Sellers.AsNoTracking().ToList() : model.Sellers
             };
-
+            ViewBag.success = model.Success;
+            model.Success = "";
             return View(vm);
         }
 
@@ -65,11 +66,9 @@ namespace FreshMart.Controllers
                 return NotFound();
             }
 
-
-
             var seller = await _context.Sellers
                 .Include(s => s.District)
-                .SingleOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (seller == null)
             {
                 return NotFound();
@@ -84,50 +83,11 @@ namespace FreshMart.Controllers
 
         [HttpPost]
         [Route("Sellers/Update/{id}")]
-        public IActionResult Update(int? id, SellerViewModel model)
+        public async Task<IActionResult> UpdateProfile([FromRoute] int? id, [FromBody] UpdateSellerProfileCommand command)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var sellerChk = _context.Sellers.Find(id);
-
-            if (User.Identity.Name != sellerChk.Email)
-            {
-                return NotFound();
-            }
-
-
-            if (id != model.Seller.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    sellerChk = model.Seller;
-                    //_context.Sellers.Update(model.Seller);
-                    _context.SaveChanges();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SellerExists(model.Seller.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-
-            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", model.Seller.DistrictId);
-
-            return View(model.Seller);
+            command.Id = id ?? command.Id;
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
 
@@ -136,6 +96,12 @@ namespace FreshMart.Controllers
         [Route("Sellers/Create")]
         public IActionResult Create()
         {
+            var sellerChk = _context.Sellers.Where(x => x.Email == User.Identity.Name).AsNoTracking().FirstOrDefault();
+            if (sellerChk != null)
+            {
+                return RedirectToAction("Index", "Sellers", new { id = sellerChk.Id });
+            }
+
             var vm = new SellerViewModel
             {
                 Districts = _context.Districts.ToList(),
@@ -235,10 +201,11 @@ namespace FreshMart.Controllers
             }
             var vm = new SellerViewModel
             {
-                Products = _context.Products.Where(c => c.SellerId == id).ToList(),
-                Districts = _context.Districts.ToList(),
-                Categories = _context.Categories.ToList(),
-                Sellers = _context.Sellers.ToList()
+                Products = _context.Products.Where(c => c.SellerId == id).AsNoTracking().ToList(),
+                Districts = _context.Districts.AsNoTracking().ToList(),
+                Categories = _context.Categories.AsNoTracking().ToList(),
+                Sellers = _context.Sellers.AsNoTracking().ToList(),
+                Seller = _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefault()
             };
             return View(vm);
         }
@@ -288,10 +255,11 @@ namespace FreshMart.Controllers
             {
                 var vmfinal = new SellerViewModel
                 {
-                    Products = _context.Products.Where(c => c.SellerId == id).ToList(),
-                    Districts = _context.Districts.ToList(),
-                    Categories = _context.Categories.ToList(),
-                    Sellers = _context.Sellers.ToList()
+                    Products = _context.Products.Where(c => c.SellerId == id).AsNoTracking().ToList(),
+                    Districts = _context.Districts.AsNoTracking().ToList(),
+                    Categories = _context.Categories.AsNoTracking().ToList(),
+                    Sellers = _context.Sellers.AsNoTracking().ToList(),
+                    Seller = _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefault()
                 };
                 return View(vmfinal);
             }
@@ -362,13 +330,14 @@ namespace FreshMart.Controllers
                 return NotFound();
             }
 
-            var prosList = _context.Products.Where(c => c.SellerId == id).ToList();
+            var prosList = _context.Products.Where(c => c.SellerId == id).AsNoTracking().ToList();
             var vm = new SellerViewModel
             {
                 Products = prosList,
-                Sellers = _context.Sellers.ToList(),
-                Districts = _context.Districts.ToList(),
-                Categories = _context.Categories.ToList()
+                Sellers = _context.Sellers.AsNoTracking().ToList(),
+                Districts = _context.Districts.AsNoTracking().ToList(),
+                Categories = _context.Categories.AsNoTracking().ToList(),
+                Seller = _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefault()
             };
 
             return View(vm);

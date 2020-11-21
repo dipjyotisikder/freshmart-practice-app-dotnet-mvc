@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model FreshMart.Models.ViewModels.SellerViewModel
+
+<!DOCTYPE html>
 <html>
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
@@ -19,13 +21,13 @@
     <link href="~/Assets/css/userStyle.css" rel="stylesheet" type="text/css" media="all" />
     <link href="~/Assets/css/fasthover.css" rel="stylesheet" type="text/css" media="all" />
     <!-- js -->
-    <script src="js/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <!-- //js -->
     <!-- countdown -->
     <link rel="stylesheet" href="~/Assets/css/jquery.countdown.css" />
     <!-- //countdown -->
     <!-- cart -->
-    <script src="~/Assets/js/simpleCart.min.js"></script>
+    @*<script src="~/Assets/js/simpleCart.min.js"></script>*@
     <!-- cart -->
     <!-- for bootstrap working -->
     <script type="text/javascript" src="~/Assets/js/bootstrap-3.1.1.min.js"></script>
@@ -49,7 +51,8 @@
         <div class="container">
 
             <div class="w3l_logo">
-                <h1><a class="text-center">Seller's Home</a></h1>
+
+                <h1><a class="text-center" asp-action="Index" asp-controller="Sellers" asp-route-id="@Model.Seller.Id">Seller's Home</a></h1>
             </div>
 
             <div class="clearfix"></div>
@@ -71,10 +74,8 @@
                 <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
                     <ul class="nav navbar-nav">
 
-                        <li><a asp-action="Index" asp-controller="Home">FreshMart Home</a></li>
+                        <li><a asp-action="Index" asp-controller="Home">FreshMart</a></li>
                         @Html.Partial("_SellerPartial")
-
-                        <li><a asp-action="Faq" asp-controller="Home">FAQ's</a></li>
                     </ul>
                 </div>
             </nav>

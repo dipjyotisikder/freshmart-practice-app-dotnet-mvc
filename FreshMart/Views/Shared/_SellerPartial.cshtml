@@ -9,11 +9,12 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    var data = Model.Sellers.Where(c => c.Email == User.Identity.Name);
-    if (data.SingleOrDefault() != null)
+    //var data = Model.Sellers.Where(c => c.Email == User.Identity.Name);
+    if (Model.Seller != null)
     {
         var sellerid = Model.Sellers.Where(c => c.Email == User.Identity.Name).Select(c => c.Id).FirstOrDefault();
         @* <li>@Html.ActionLink("Add Product", "SellProduct", "Sellers", new { id = sellerid })</li> *@
+        <li><a asp-action="Index" asp-controller="Sellers" asp-route-id="@sellerid">Profile</a></li>
         <li><a asp-action="SellProduct" asp-controller="Sellers" asp-route-id="@sellerid">Add Products</a></li>
         <li><a asp-action="SellerProducts" asp-controller="Sellers">Your Products</a></li>
     }

@@ -58,9 +58,6 @@ namespace FreshMart.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Admin/ProductManager/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,SellerId,Price,Description,Unit,IsPublished,ItemInStock,DistrictId,CategoryId,ImagePath,OfferPrice,OfferExpireDate,CreatedAt,UpdatedAt")] Product product)
