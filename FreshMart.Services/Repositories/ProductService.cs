@@ -10,56 +10,61 @@ namespace FreshMart.Services
 {
     public class ProductService : IProductService
     {
-        private CartService cartService;
-        private IHttpContextAccessor _httpContextAccessor;
-        private readonly ApplicationDbContext _context;
+        private readonly ICartService _cartService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AppDbContext _context;
 
-        public ProductService(IHttpContextAccessor httpContextAccessor, ApplicationDbContext context)
+        public ProductService(IHttpContextAccessor httpContextAccessor, AppDbContext context,
+            ICartService cartService)
         {
             _httpContextAccessor = httpContextAccessor;
             _context = context;
-            cartService = new CartService(httpContextAccessor, _context);
+            _cartService = cartService;
         }
 
 
         //Products
         public List<Product> GetAllProducts()
         {
-            var products = _context.Products.Include(c => c.Category).Include(c => c.District).Include(p => p.Seller).OrderByDescending(c => c.CreatedAt).ToList();
+            var products = _context.Products
+                .Include(c => c.Category)
+                .Include(c => c.District)
+                .Include(p => p.Seller)
+                .OrderByDescending(c => c.CreatedAt).AsNoTracking()
+                .ToList();
             return products;
         }
-        public List<Product> GetProductByCategoryID(int id)
+
+
+        public List<Product> GetProductsByCategoryId(long id)
         {
             var pro = _context.Products
                 .Include(c => c.Category)
                 .Include(c => c.District)
                 .Where(c => c.CategoryId == id)
-                .OrderByDescending(c => c.CreatedAt)
+                .OrderByDescending(c => c.CreatedAt).AsNoTracking()
                 .ToList();
+
             return pro;
         }
 
 
-        public ProductViewModel ProductVMWithCartCount(int id)
+        public ProductViewModel GetProductViewModelWithCartCount(long id)
         {
-
-            var products = GetProductByCategoryID(id);
-
+            var products = GetProductsByCategoryId(id);
             var all = GetAllProducts();
-
             var categories = GetAllCategories();
             var districts = GetAllDistricts();
-            var domains = GetCategoryByDomain();
+            var domains = categories.Where(x => x.ParentId != null).Select(x => x.Parent.Name);
 
-            var cartCount = cartService.GetCartCount();
             var productView = new ProductViewModel
             {
                 Products = products,
                 Category = categories,
                 District = districts,
                 DistinctCat = domains,
-                BaseProduct = all,  //all variable is created because //it will always remain same as it is inherited
-                CartCount = cartCount
+                BaseProduct = all,
+                CartCount = _cartService.GetCartCount()
             };
 
             return productView;
@@ -68,46 +73,46 @@ namespace FreshMart.Services
 
         public List<District> GetAllDistricts()
         {
-            var districts = _context.Districts.ToList();
-            return districts;
+            return _context.Districts.AsNoTracking().ToList();
         }
 
 
         //Category
         public List<Category> GetAllCategories()
         {
-            var category = _context.Categories.ToList();
-            return category;
+            return _context.Categories.Include(x => x.Parent).AsNoTracking().ToList();
         }
-        public List<string> GetCategoryByDomain()
+
+
+        public List<string> GetParentCategoryNames()
         {
-            var domains = _context.Categories.Select(c => c.Domain).Distinct().ToList();
-            return domains;
+            var distinctParents = _context.Categories.AsNoTracking().Select(c => c.ParentId).Distinct();
+
+            return (from pcId in distinctParents
+                    join c in _context.Categories.AsNoTracking()
+                    on pcId equals c.Id
+                    select c.Name).ToList();
         }
-        public string GetCategoryByDomainID(int id)
+
+
+        public Category GetParentCategory(long categoryId)
         {
-            var domainName = _context.Categories.Where(c => c.Id == id).Select(c => c.Domain).First();
-            return domainName;
+            return _context.Categories.Where(c => c.Id == categoryId).Select(c => c.Parent).FirstOrDefault();
         }
 
 
         public ProductViewModel GetProductViewModel()
         {
-            var categories = _context.Categories.ToList();
-            var districts = _context.Districts.ToList();
-            var domains = _context.Categories.Select(c => c.Domain).Distinct().ToList();
-
             CartService cs = new CartService(_httpContextAccessor, _context);
             var totalPrice = cs.GetCartTotalPrice();
-            var cartCount = cs.GetCartCount();
             var viewmodel = new ProductViewModel
             {
-                District = districts,
-                Category = categories,
-                DistinctCat = domains,
-                CartCount = cartCount,
+                District = GetAllDistricts(),
+                Category = GetAllCategories(),
+                DistinctCat = GetParentCategoryNames(),
+                CartCount = _cartService.GetCartCount(),
                 TotalPrice = totalPrice,
-                Sellers = _context.Sellers.ToList()
+                Sellers = _context.Sellers.AsNoTracking().ToList()
             };
             return viewmodel;
 

@@ -37,7 +37,7 @@
                             <thead>
                                 <tr>
                                     <th>@Html.DisplayNameFor(model => model.Name)</th>
-                                    <th>@Html.DisplayNameFor(model => model.District)</th>
+                                    <th>@Html.DisplayNameFor(model => model.User.District)</th>
                                     <th>Take Action</th>
                                 </tr>
                             </thead>
@@ -47,7 +47,7 @@
                                 {
                                     <tr>
                                         <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.District.Name)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.User.District.Name)</td>
 
                                         <td>
                                             @if (item.Approval == true)

@@ -14,9 +14,9 @@ namespace FreshMart.Controllers
     [Authorize]
     public class CustomersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
-        public CustomersController(ApplicationDbContext context)
+        public CustomersController(AppDbContext context)
         {
             _context = context;
         }
@@ -25,18 +25,18 @@ namespace FreshMart.Controllers
         [Route("Customers")]
         public IActionResult Index()
         {
-
-
             var app = _context.Customers.Where(c => c.Email == User.Identity.Name);
             if (app.SingleOrDefault() == null)
             {
                 return RedirectToAction("Index", "Home");
             }
+            var customer = _context.Customers.Where(c => c.Email == User.Identity.Name)
+                .Include(x => x.User).AsNoTracking()
+                .FirstOrDefault();
 
-            var customerSingle = _context.Customers.Where(c => c.Email == User.Identity.Name).Single();
-            ViewBag.districts = _context.Districts.ToList();
+            ViewBag.districts = _context.Districts.AsNoTracking().ToList();
 
-            return View(customerSingle);
+            return View(customer);
         }
 
 
@@ -62,82 +62,62 @@ namespace FreshMart.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", customer.DistrictId);
+            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", customer.User.DistrictId);
             return View(customer);
         }
-
-
-
-
 
 
         [Route("Customers/orders")]
         public IActionResult Orders()
         {
-            var app = _context.Customers.Where(c => c.Email == User.Identity.Name);
-            if (app.SingleOrDefault() == null)
+            var customer = _context.Customers.Where(c => c.Email == User.Identity.Name).FirstOrDefault();
+            if (customer == null)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            var customerSingle = _context.Customers.Where(c => c.Email == User.Identity.Name).Single();
-            var orders = _context.Orders.Where(c => c.CustomerId == customerSingle.Id).ToList();
+            var orders = _context.Orders.Where(c => c.CustomerId == customer.Id).AsNoTracking().ToList();
 
-            List<AgentOrder> agentOrders = new List<AgentOrder>();
-            foreach (var item in orders)
-            {
-                agentOrders.Add(_context.AgentOrders.Where(c => c.OrderId == item.Id).SingleOrDefault());
-            }
+            var agentOrders = from ao in _context.AgentOrders.AsNoTracking()
+                              join o in orders
+                              on ao.OrderId equals o.Id
+                              select ao;
 
             ViewBag.orders = orders;
             ViewBag.agentOrders = agentOrders;
-            ViewBag.districts = _context.Districts.ToList();
+            ViewBag.districts = _context.Districts.AsNoTracking().ToList();
 
             return View(orders);
         }
 
 
 
-
-
-
         [Route("Admin/Customers/DeleteOrder/{id}")]
-
-        public IActionResult DeleteOrder(int id)
+        public async Task<IActionResult> DeleteOrder(long id)
         {
             if (id == 0)
             {
                 return NotFound();
             }
-            var orderchk = _context.Orders.Include(c => c.Customer).Where(c => c.Id == id).SingleOrDefault();
+            var orderchk = _context.Orders.Include(c => c.Customer).Where(c => c.Id == id).FirstOrDefault();
 
             if (User.Identity.Name != orderchk.Customer.Email)
             {
                 return NotFound();
             }
 
-            var order = _context.Orders.SingleOrDefault(m => m.Id == id);
+            var order = _context.Orders.FirstOrDefault(m => m.Id == id);
             _context.Orders.Remove(order);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
 
-
-
-        private bool CustomerExists(int id)
+        private bool CustomerExists(long id)
         {
             return _context.Customers.Any(e => e.Id == id);
         }

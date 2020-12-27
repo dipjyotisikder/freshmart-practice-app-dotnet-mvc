@@ -1,11 +1,14 @@
 ﻿using FreshMart.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
+
 namespace FreshMart.Database
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
@@ -14,12 +17,14 @@ namespace FreshMart.Database
         public DbSet<ProductOrder> ProductOrders { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<CategoryDomain> CategoryDomains { get; set; }
 
         public DbSet<Agent> Agents { get; set; }
         public DbSet<AgentOrder> AgentOrders { get; set; }
 
         public DbSet<District> Districts { get; set; }
+        public DbSet<Division> Divisions { get; set; }
+
+
         public DbSet<Customer> Customers { get; set; }
 
         public DbSet<SellerRequest> SellerRequests { get; set; }
@@ -33,13 +38,12 @@ namespace FreshMart.Database
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
-            builder.Entity<ProductOrder>().HasKey(t => new { t.ProductId, t.OrderId });
+            //builder.Entity<ProductOrder>().HasKey(t => new { t.ProductId, t.OrderId });
 
-            builder.Entity<ProductOrder>().HasOne(pt => pt.Product).WithMany(p => p.ProductOrder).HasForeignKey(pt => pt.ProductId);
-            builder.Entity<ProductOrder>().HasOne(pt => pt.Order).WithMany(p => p.ProductOrder).HasForeignKey(pt => pt.OrderId);
+            //builder.Entity<ProductOrder>().HasOne(pt => pt.Product).WithMany(p => p.ProductOrders).HasForeignKey(pt => pt.ProductId);
+            //builder.Entity<ProductOrder>().HasOne(pt => pt.Order).WithMany(p => p.ProductOrders).HasForeignKey(pt => pt.OrderId);
 
         }
-
 
     }
 }

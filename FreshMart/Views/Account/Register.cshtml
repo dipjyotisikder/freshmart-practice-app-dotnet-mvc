@@ -26,7 +26,7 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="../../index2.html"><b>User&nbsp;</b>REGISTER</a>
+            <a href="../../index2.html">USER&nbsp;REGISTRATION</a>
         </div>
         <!-- /.login-logo -->
         <div class="login-box-body">
@@ -35,12 +35,25 @@
             <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
 
 
-                <div asp-validation-summary="All" class="text-danger"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Email"></label>
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
+
+                <div class="form-group">
+                    <select id="districtId" asp-for="DistrictId" class="form-control">
+                        <option value="@string.Empty">Please select a district.</option>
+                        @foreach (var item in Model.Districts)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+
+                        }
+                    </select>
+                    <span asp-validation-for="DistrictId" class="text-danger"></span>
+                </div>
+
                 <div class="form-group">
                     <label asp-for="Password"></label>
                     <input asp-for="Password" class="form-control" />
@@ -52,6 +65,7 @@
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
 
+                @Html.HiddenFor(x => x.Districts)
                 <div class="row">
 
                     <!-- /.col -->

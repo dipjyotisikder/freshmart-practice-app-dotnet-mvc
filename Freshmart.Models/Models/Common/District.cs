@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using FreshMart.Core.Infrastructure;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FreshMart.Models
 {
     [Table("Districts")]
-    public class District
+    public class District : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
-        public string Division { get; set; }
+
+
+        public long? DivisionId { get; set; }
+        [ForeignKey(nameof(DivisionId))]
+        public virtual Division Division { get; set; }
     }
 }

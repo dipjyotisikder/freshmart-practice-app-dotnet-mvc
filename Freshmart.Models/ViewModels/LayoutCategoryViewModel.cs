@@ -6,7 +6,7 @@ namespace FreshMart.Models.ViewModels
     {
 
         public IList<Category> Category { get; set; }
-        public IList<string> DistinctCat { get; set; }
+        public IEnumerable<string> DistinctCat { get; set; }
         public IList<Product> BaseProduct { get; set; }
         public int CartCount { get; set; }
         public float TotalPrice { get; set; }

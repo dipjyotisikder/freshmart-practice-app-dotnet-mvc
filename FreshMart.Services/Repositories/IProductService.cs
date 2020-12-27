@@ -8,17 +8,17 @@ namespace FreshMart.Services
     {
         //Products
         List<Product> GetAllProducts();
-        List<Product> GetProductByCategoryID(int id);
-        ProductViewModel ProductVMWithCartCount(int id);
+        List<Product> GetProductsByCategoryId(long id);
+        ProductViewModel GetProductViewModelWithCartCount(long id);
 
 
         List<District> GetAllDistricts();
 
         //Category
         List<Category> GetAllCategories();
-        List<string> GetCategoryByDomain();
+        List<string> GetParentCategoryNames();
 
-        string GetCategoryByDomainID(int id);
+        Category GetParentCategory(long id);
 
         ProductViewModel GetProductViewModel();
 

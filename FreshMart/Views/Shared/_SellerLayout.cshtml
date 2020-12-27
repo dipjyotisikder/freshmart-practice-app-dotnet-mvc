@@ -46,13 +46,12 @@
 </head>
 
 <body>
-
     <div class="header" id="home1">
         <div class="container">
-
             <div class="w3l_logo">
-
-                <h1><a class="text-center" asp-action="Index" asp-controller="Sellers" asp-route-id="@Model.Seller.Id">Seller's Home</a></h1>
+                <h1>
+                    <a class="text-center" asp-action="Index" asp-controller="Sellers" asp-route-id="@Model.Seller?.Id">Seller's Home</a>
+                </h1>
             </div>
 
             <div class="clearfix"></div>
@@ -62,7 +61,6 @@
     <div class="navigation " id="home1">
         <div class="container">
             <nav class="navbar navbar-default">
-
                 <div class="navbar-header nav_2">
                     <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
                         <span class="sr-only">Toggle navigation</span>
@@ -73,7 +71,6 @@
                 </div>
                 <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
                     <ul class="nav navbar-nav">
-
                         <li><a asp-action="Index" asp-controller="Home">FreshMart</a></li>
                         @Html.Partial("_SellerPartial")
                     </ul>

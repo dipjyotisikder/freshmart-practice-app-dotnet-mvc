@@ -14,18 +14,19 @@ using FreshMart.Database;
 using FreshMart.Models.ViewModels;
 using FreshMart.Models.Commands;
 using MediatR;
+using FreshMart.Core;
 
 namespace FreshMart.Controllers
 {
     [Authorize]
     public class SellersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
         private readonly IHostingEnvironment _environment;
         private readonly IMediator _mediator;
 
 
-        public SellersController(ApplicationDbContext context,
+        public SellersController(AppDbContext context,
             IHostingEnvironment env,
             IMediator mediator)
         {
@@ -36,11 +37,14 @@ namespace FreshMart.Controllers
 
         // GET: Sellers
         [Route("Sellers/{id}")]
-        public ViewResult Index(int id, SellerViewModel model)
+        public ViewResult Index(long id, SellerViewModel model)
         {
             var vm = new SellerViewModel
             {
-                Seller = model.Seller == null ? _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefault() : model.Seller,
+                Seller = model.Seller == null ? _context.Sellers
+                .Where(x => x.Id == id)
+                .Include(x => x.User).ThenInclude(x => x.District)
+                .AsNoTracking().FirstOrDefault() : model.Seller,
                 Districts = model.Districts == null || model.Districts.Count == 0 ? _context.Districts.AsNoTracking().ToList() : model.Districts,
                 Sellers = model.Sellers == null || model.Sellers.Count == 0 ? _context.Sellers.AsNoTracking().ToList() : model.Sellers
             };
@@ -53,7 +57,7 @@ namespace FreshMart.Controllers
 
         // GET: Sellers/Details/5
         [Route("Sellers/Details/{id}")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
             {
@@ -67,8 +71,9 @@ namespace FreshMart.Controllers
             }
 
             var seller = await _context.Sellers
-                .Include(s => s.District)
+                .Include(s => s.User).ThenInclude(x => x.District).AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (seller == null)
             {
                 return NotFound();
@@ -76,8 +81,6 @@ namespace FreshMart.Controllers
 
             return View(seller);
         }
-
-
 
 
 
@@ -104,31 +107,32 @@ namespace FreshMart.Controllers
 
             var vm = new SellerViewModel
             {
-                Districts = _context.Districts.ToList(),
-                Sellers = _context.Sellers.ToList()
+                Districts = _context.Districts.AsNoTracking().ToList(),
+                Sellers = _context.Sellers.AsNoTracking().ToList(),
+                Seller = sellerChk
             };
-
 
             ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division");
             return View(vm);
         }
+
 
         [Authorize]
         [HttpPost]
         [Route("Sellers/request")]
         public async Task<ActionResult> SellerRequest(SellerViewModel model)
         {
+            var vm = new SellerViewModel
+            {
+                Districts = _context.Districts.AsNoTracking().ToList(),
+                Sellers = _context.Sellers.AsNoTracking().ToList(),
+                Error = ""
+            };
+
             var emailCheck = _context.SellerRequests.Where(c => c.Email == User.Identity.Name);
             if (emailCheck.ToList().Count > 0)
             {
-
-                ViewBag.err = "You have already requested. You will approved soon!";
-                var vm = new SellerViewModel
-                {
-                    Districts = _context.Districts.ToList(),
-                    Sellers = _context.Sellers.ToList(),
-                    Error = ViewBag.err
-                };
+                vm.Error = "You have already requested. You will approved soon!";
                 return View("Create", vm);
             }
 
@@ -145,17 +149,12 @@ namespace FreshMart.Controllers
 
             if (model.SellerRequest.SellerName == null || model.SellerRequest.DateOfBirth == null)
             {
-                var vm = new SellerViewModel
-                {
-                    Districts = _context.Districts.ToList(),
-                    Sellers = _context.Sellers.ToList(),
-                    Error = "You can not ignore required fields"
-                };
+                vm.Error = "You can not ignore required fields";
                 return View("Create", vm);
             }
             else
             {
-                var vm = new SellerRequest
+                var sellerRequest = new SellerRequest
                 {
                     SellerName = model.SellerRequest.SellerName,
                     Email = User.Identity.Name,
@@ -164,41 +163,35 @@ namespace FreshMart.Controllers
                     DateOfBirth = model.SellerRequest.DateOfBirth,
                     CompanyName = model.SellerRequest.CompanyName
                 };
-
-                _context.SellerRequests.Add(vm);
+                await _context.SellerRequests.AddAsync(sellerRequest);
                 await _context.SaveChangesAsync();
             }
-            var vms = new SellerViewModel
-            {
-                Districts = _context.Districts.ToList(),
-                Sellers = _context.Sellers.ToList(),
-                Error = "Your request has been sent! Wait for approval."
-            };
-            return RedirectToAction("Create", "Sellers", vms);
+
+            vm.Error = "Your request has been sent! Wait for approval.";
+            return View("Create", vm);
         }
 
 
-
         [Route("Seller/SellProduct/{id}")]
-        public ActionResult SellProduct(int? id)
+        public ActionResult SellProduct(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var sellerChk = _context.Sellers.Find(id);
 
+            var sellerChk = _context.Sellers.Find(id);
             if (User.Identity.Name != sellerChk.Email)
             {
                 return NotFound();
             }
 
             var data = _context.Sellers.Where(c => c.Email == User.Identity.Name);
-
             if (id == null || data.SingleOrDefault() == null)
             {
                 NotFound();
             }
+
             var vm = new SellerViewModel
             {
                 Products = _context.Products.Where(c => c.SellerId == id).AsNoTracking().ToList(),
@@ -212,14 +205,14 @@ namespace FreshMart.Controllers
 
         [HttpPost]
         [Route("Seller/SellProduct/{id}")]
-        public ActionResult SellProduct(int id, IFormFile file, SellerViewModel vm)
+        public ActionResult SellProduct(long id, IFormFile file, SellerViewModel vm)
         {
             if (id == 0)
             {
                 return NotFound();
             }
-            var sellerChk = _context.Sellers.Find(id);
 
+            var sellerChk = _context.Sellers.Find(id);
             if (User.Identity.Name != sellerChk.Email)
             {
                 return NotFound();
@@ -235,14 +228,17 @@ namespace FreshMart.Controllers
             {
                 ModelState.AddModelError("Product.Title", "Please enter product name");
             }
+
             if (vm.Product.Price == 0)
             {
                 ModelState.AddModelError("Product.Price", "Please enter price");
             }
+
             if (vm.Product.ItemInStock == 0)
             {
                 ModelState.AddModelError("Product.ItemInStock", "Please enter itemInStock");
             }
+
             if (vm.Product.Unit == null)
             {
                 ModelState.AddModelError("Product.Unit", "Please enter unit");
@@ -261,6 +257,7 @@ namespace FreshMart.Controllers
                     Sellers = _context.Sellers.AsNoTracking().ToList(),
                     Seller = _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefault()
                 };
+
                 return View(vmfinal);
             }
 
@@ -270,7 +267,6 @@ namespace FreshMart.Controllers
             {
                 return RedirectToAction("request", "Products", new { id = id });
             }
-
 
             ImgUploader img = new ImgUploader(_environment);
 
@@ -284,6 +280,7 @@ namespace FreshMart.Controllers
 
             var products = new Product
             {
+                Id = NumberUtilities.GetUniqueNumber(),
                 Title = vm.Product.Title,
                 Description = vm.Product.Description,
                 Price = vm.Product.Price,
@@ -316,7 +313,7 @@ namespace FreshMart.Controllers
 
 
         [Route("Sellers/SellerProducts/{id}")]
-        public ActionResult SellerProducts(int? id)
+        public ActionResult SellerProducts(long? id)
         {
 
             if (id == null)
@@ -347,7 +344,7 @@ namespace FreshMart.Controllers
 
 
         // GET: Sellers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
             {
@@ -362,9 +359,8 @@ namespace FreshMart.Controllers
                 return NotFound();
             }
 
-
             var seller = await _context.Sellers
-                .Include(s => s.District)
+                .Include(s => s.User).ThenInclude(s => s.District).AsNoTracking()
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (seller == null)
             {
@@ -380,7 +376,7 @@ namespace FreshMart.Controllers
         // POST: Sellers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int? id)
+        public async Task<IActionResult> DeleteConfirmed(long? id)
         {
             if (id == null)
             {
@@ -399,7 +395,7 @@ namespace FreshMart.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SellerExists(int id)
+        private bool SellerExists(long id)
         {
             return _context.Sellers.Any(e => e.Id == id);
         }

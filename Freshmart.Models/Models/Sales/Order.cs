@@ -1,18 +1,16 @@
-﻿using System;
+﻿using FreshMart.Core.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace FreshMart.Models
 {
     [Table("Orders")]
-    public class Order
+    public class Order : BaseEntity
     {
-        public int Id { get; set; }
-
-        public int CustomerId { get; set; }
+        public long CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }
-
 
         [DisplayName("Your Account Name")]
         public string AccountNo { get; set; }
@@ -26,11 +24,6 @@ namespace FreshMart.Models
 
         public string ShippingAddress { get; set; }
 
-        public int DistrictId { get; set; }
-
-        [ForeignKey("DistrictId")]
-        public District District { get; set; }
-
         public string PostalCode { get; set; }
 
         public string Zip { get; set; }
@@ -43,8 +36,8 @@ namespace FreshMart.Models
 
         public DateTime OrderDate { get; set; }
 
-        public ICollection<ProductOrder> ProductOrder { get; set; }
-        public ICollection<AgentOrder> AgentOrders { get; set; }
+        public virtual ICollection<ProductOrder> ProductOrders { get; set; }
+        public virtual ICollection<AgentOrder> AgentOrders { get; set; }
 
     }
 }

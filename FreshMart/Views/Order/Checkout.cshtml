@@ -72,20 +72,7 @@
                                             <span asp-validation-for="Customer.DateOfBirth" class="text-danger"></span>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            @Html.LabelFor(model => model.Order.DistrictId, htmlAttributes: new { @class = "control-label " })
-                                            <div class="col-md-12">
-                                                @Html.DropDownListFor(model => model.Order.DistrictId, new SelectList(Model.District, "Id", "Name"), "Select District", new { @class = "form-control col-md-12" })
-                                                @Html.ValidationMessageFor(model => model.Order.DistrictId, "", new { @class = "text-danger" })
-                                            </div>
-                                        </div>
-                                    </div>
-
-
                                 </div>
-
                             }
                             else
                             {

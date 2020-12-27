@@ -41,9 +41,9 @@
 
 
                             <div class="form-group">
-                                @Html.LabelFor(model => model.Category.Domain, htmlAttributes: new { @class = "control-label " })
+                                <label class="control-label">Parent</label>
                                 <div class="col-md-12">
-                                    @Html.DropDownListFor(model => model.Category.Domain, new SelectList(Model.CategoryDomains, "Name", "Name"), "Select Domain", new { @class = "form-control " })
+                                    @Html.DropDownListFor(model => model.Category.ParentId, new SelectList(Model.Categories, "Id", "Name"), "Select Parent", new { @class = "form-control " })
 
                                 </div>
                             </div>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FreshMart.Core;
 using FreshMart.Database;
 using FreshMart.Helper;
 using FreshMart.Models;
@@ -20,27 +21,28 @@ namespace FreshMart.Controllers
 {
     public class ProductsController : Controller
     {
-        private List<Product> product;
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
         //private int cartCount;
         private IHostingEnvironment environment;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private CartService cs;
-        private ProductService ps;
+        private ICartService _cartService;
+        private IProductService _productService;
 
 
         private readonly IMediator _mediator;
 
-        public ProductsController(ApplicationDbContext con,
+        public ProductsController(AppDbContext con,
             IHostingEnvironment appEnvironment,
             IHttpContextAccessor httpContextAccessor,
+            ICartService cartService,
+            IProductService productService,
             IMediator mediator)
         {
             _context = con;
             environment = appEnvironment;
             _httpContextAccessor = httpContextAccessor;
-            cs = new CartService(httpContextAccessor, _context);
-            ps = new ProductService(httpContextAccessor, _context);
+            _cartService = cartService;
+            _productService = productService;
             _mediator = mediator;
         }
 
@@ -61,9 +63,9 @@ namespace FreshMart.Controllers
 
         [HttpGet]
         [Route("products/index/{id}")]
-        public IActionResult Index(int id)
+        public IActionResult Index(long id)
         {
-            var productView = ps.ProductVMWithCartCount(id);
+            var productView = _productService.GetProductViewModelWithCartCount(id);
             return View(productView);
         }
 
@@ -71,30 +73,32 @@ namespace FreshMart.Controllers
 
         [HttpGet]
         [Route("products/category/{id}")]
-        public IActionResult Category(int id)
+        public IActionResult Category(long id)
         {
-            var cartCount = cs.GetCartCount();
+            var cartCount = _cartService.GetCartCount();
 
-            var domainName = ps.GetCategoryByDomainID(id);
+            var parent = _productService.GetParentCategory(id);
+
             var products = _context.Products
                 .Include(c => c.Category)
                 .Include(c => c.District)
-                .Where(c => c.Category.Domain == domainName)
+                .Where(c => c.Category.ParentId == parent.Id).AsNoTracking()
                 .ToList();
-            var pro = ps.GetAllProducts();
-            var categories = ps.GetAllCategories();
-            var districts = ps.GetAllDistricts();
-            var domains = ps.GetCategoryByDomain();
+
+            var pro = _productService.GetAllProducts();
+            var categories = _productService.GetAllCategories();
+            var districts = _productService.GetAllDistricts();
+            var parentCategories = _productService.GetParentCategoryNames();
 
             var productView = new ProductViewModel
             {
                 Products = products,
                 Category = categories,
                 District = districts,
-                DistinctCat = domains,
+                DistinctCat = parentCategories,
                 BaseProduct = pro, //it will always remain same as it is inherited
                 CartCount = cartCount,
-                TotalPrice = cs.GetCartTotalPrice(),
+                TotalPrice = _cartService.GetCartTotalPrice(),
                 Sellers = _context.Sellers.ToList()
             };
             return View("Index", productView);
@@ -107,7 +111,7 @@ namespace FreshMart.Controllers
         public IActionResult AddProduct()
         {
 
-            var viewmodel = ps.GetProductViewModel();
+            var viewmodel = _productService.GetProductViewModel();
             return View(viewmodel);
         }
 
@@ -116,8 +120,6 @@ namespace FreshMart.Controllers
         [HttpPost]
         public IActionResult AddProduct(IFormFile file, ProductViewModel vm)
         {
-
-
             if (ModelState.IsValid)
             {
                 var Seller = _context.Sellers.Where(s => s.Email.Contains(User.Identity.Name));
@@ -132,6 +134,7 @@ namespace FreshMart.Controllers
 
                 var products = new Product
                 {
+                    Id = NumberUtilities.GetUniqueNumber(),
                     Title = vm.Product.Title,
 
                     Description = vm.Product.Description,
@@ -153,13 +156,13 @@ namespace FreshMart.Controllers
                 _context.Add(products);
                 _context.SaveChanges();
 
-                int id = products.Id;
+                long id = products.Id;
 
 
             }
             else
             {
-                var viewmodel = ps.GetProductViewModel();
+                var viewmodel = _productService.GetProductViewModel();
 
                 ViewBag.error = "You Cannot ignore required fields";
                 return View("AddProduct", viewmodel);
@@ -189,7 +192,9 @@ namespace FreshMart.Controllers
 
             var categories = _context.Categories.ToList();
             var districts = _context.Districts.ToList();
-            var domains = _context.Categories.Select(c => c.Domain).Distinct().ToList();
+            var domains = _context.Categories.Where(x => x.ParentId != null)
+                .Include(x => x.Parent)
+                .Select(c => c.Parent.Name).AsEnumerable();
 
             CartService cs = new CartService(_httpContextAccessor, _context);
             var totalPrice = cs.GetCartTotalPrice();

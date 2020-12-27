@@ -1,23 +1,16 @@
-﻿@model IEnumerable<FreshMart.Models.CategoryDomain>
-
+﻿@model IEnumerable<FreshMart.Models.Category>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Parents";
     Layout = "~/Areas/Admin/Views/Shared/_adminlayout.cshtml";
 }
-
-
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            All Categories
+            All Parent Categories
         </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="#">Tables</a></li>
-            <li class="active">Data tables</li>
-        </ol>
+
     </section>
 
 
@@ -26,17 +19,12 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">Hover Data Table</h3>
-                    </div>
                     <!-- /.box-header -->
                     <div class="box-body">
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Name)
-                                    </th>
+                                    <th>Name</th>
                                     <th>Take Action</th>
                                 </tr>
                             </thead>
@@ -45,14 +33,13 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                        </td>
-                                        <td>
-                                            @Html.ActionLink("Edit", "Edit", "CategoryDomains", new { id = item.Id }) |
-                                            @Html.ActionLink("Delete", "DeleteConfirmed", "CategoryDomains", new { id = item.Id })
-                                        </td>
+                                        <td>@item.Name</td>
 
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", "Categories", new { id = item.Id }) |
+                                            @Html.ActionLink("Delete", "DeleteConfirmed", "Categories", new { id = item.Id })
+
+                                        </td>
                                     </tr>
                                 }
 
@@ -71,3 +58,5 @@
     <!-- /.content -->
 
 </div>
+
+

@@ -8,7 +8,7 @@ namespace FreshMart.Models.Commands
 {
     public class UpdateSellerProfileCommand : IRequest<SellerViewModel>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; set; }
 
@@ -18,7 +18,7 @@ namespace FreshMart.Models.Commands
 
         public DateTime DateOfBirth { get; set; }
 
-        public int DistrictId { get; set; }
+        public long DistrictId { get; set; }
 
         public string CompanyName { get; set; }
 

@@ -19,11 +19,11 @@ namespace FreshMart.Controllers
     {
 
 
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
         private IHttpContextAccessor _httpContextAccessor;
         private int cartCount;
         private CartService cs;
-        public HomeController(ApplicationDbContext con, IHttpContextAccessor hca)
+        public HomeController(AppDbContext con, IHttpContextAccessor hca)
         {
             _context = con;
             _httpContextAccessor = hca;
@@ -36,7 +36,7 @@ namespace FreshMart.Controllers
         }
 
         [Route("/{msg?}")]
-        public IActionResult Index(string msg)
+        public async Task<IActionResult> Index(string msg)
         {
             string a = "";
             if (msg != null)
@@ -57,13 +57,13 @@ namespace FreshMart.Controllers
 
 
 
-            var products = _context.Products
+            var products = await _context.Products
                .Include(c => c.Category)
                .Include(c => c.District).AsNoTracking()
-               .ToList();
-            var categories = _context.Categories.AsNoTracking().ToList();
-            var districts = _context.Districts.AsNoTracking().ToList();
-            var domains = _context.Categories.Select(c => c.Domain).Distinct().AsNoTracking().ToList();
+               .ToListAsync();
+            var categories = await _context.Categories.Where(x => !x.IsParent).AsNoTracking().ToListAsync();
+            var districts = await _context.Districts.AsNoTracking().ToListAsync();
+            var domains = await _context.Categories.Where(x => x.IsParent).AsNoTracking().Select(c => c.Name).ToListAsync();
 
 
             var productView = new ProductViewModel
@@ -75,8 +75,8 @@ namespace FreshMart.Controllers
                 CartCount = this.cartCount,
                 TotalPrice = cs.GetCartTotalPrice(),
                 Message = a,
-                Sellers = _context.Sellers.AsNoTracking().ToList(),
-                Customers = _context.Customers.AsNoTracking().ToList(),
+                Sellers = await _context.Sellers.AsNoTracking().ToListAsync(),
+                Customers = await _context.Customers.AsNoTracking().ToListAsync(),
 
             };
 
@@ -85,24 +85,24 @@ namespace FreshMart.Controllers
 
 
         [Route("/Home/About")]
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
             ViewData["Message"] = "Your application description page.";
 
 
-            var categories = _context.Categories.ToList();
-            var districts = _context.Districts.ToList();
-            var domains = _context.Categories.Select(c => c.Domain).Distinct().ToList();
+            var categories = await _context.Categories.Where(x => !x.IsParent).ToListAsync();
+            var districts = await _context.Districts.ToListAsync();
+            var parents = await _context.Categories.Where(x => x.IsParent).Select(c => c.Parent.Name).Distinct().ToListAsync();
 
             var cartCount = cs.GetCartCount();
             var productView = new ProductViewModel
             {
                 Category = categories,
                 District = districts,
-                DistinctCat = domains,
+                DistinctCat = parents,
                 CartCount = cartCount,
                 TotalPrice = cs.GetCartTotalPrice(),
-                Sellers = _context.Sellers.ToList()
+                Sellers = await _context.Sellers.ToListAsync()
             };
 
 
@@ -127,7 +127,7 @@ namespace FreshMart.Controllers
 
             var categories = _context.Categories.ToList();
             var districts = _context.Districts.ToList();
-            var domains = _context.Categories.Select(c => c.Domain).Distinct().ToList();
+            var domains = _context.Categories.Where(x => x.ParentId != null).Select(c => c.Parent.Name).Distinct().ToList();
 
             var cartCount = cs.GetCartCount();
             var productView = new ProductViewModel

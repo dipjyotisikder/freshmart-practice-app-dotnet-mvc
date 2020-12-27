@@ -17,13 +17,13 @@ namespace FreshMart.Controllers
 
     public class CartController : Controller
     {
-        //ApplicationUser appUser;
+        //AppUser appUser;
 
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
         private int cartCount;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IProductService _productService;
-        public CartController(ApplicationDbContext con, IHttpContextAccessor hca, IProductService productService)
+        public CartController(AppDbContext con, IHttpContextAccessor hca, IProductService productService)
         {
             _context = con;
             _httpContextAccessor = hca;
@@ -59,7 +59,7 @@ namespace FreshMart.Controllers
         }
 
         [Route("Cart/addtocart/{id}")]
-        public ActionResult AddToCart(int id)
+        public ActionResult AddToCart(long id)
         {
 
 
@@ -104,7 +104,7 @@ namespace FreshMart.Controllers
         }
 
         [Route("Cart/RemoveItem/{id}")]
-        public ActionResult RemoveItem(int id)
+        public ActionResult RemoveItem(long id)
         {
 
             var cart = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart");
@@ -116,7 +116,7 @@ namespace FreshMart.Controllers
         }
 
         //local function start
-        private int Exists(List<CartItem> cart, int id)
+        private int Exists(List<CartItem> cart, long id)
         {
             for (int i = 0; i < cart.Count; i++)
             {

@@ -4,16 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using FreshMart.Core.Infrastructure;
 using FreshMart.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FreshMart.Models
 {
-    public class SellerRequest
+    public class SellerRequest : BaseEntity
     {
-
-        public int Id { get; set; }
-
         [Required]
         public string SellerName { get; set; }
         [Required]
@@ -23,8 +21,7 @@ namespace FreshMart.Models
 
         public DateTime DateOfBirth { get; set; }
 
-
-        public int DistrictId { get; set; }
+        public long DistrictId { get; set; }
         [ForeignKey("DistrictId")]
         public District District { get; set; }
 

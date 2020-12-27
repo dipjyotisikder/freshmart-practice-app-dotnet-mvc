@@ -11,10 +11,11 @@ namespace FreshMart.Services
     {
         private int cartCount;
         private float total;
-        IHttpContextAccessor _httpContextAccessor;
-        private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AppDbContext _context;
 
-        public CartService(IHttpContextAccessor httpContextAccessor, ApplicationDbContext context)
+        public CartService(IHttpContextAccessor httpContextAccessor,
+            AppDbContext context)
         {
             _httpContextAccessor = httpContextAccessor;
             _context = context;

@@ -8,12 +8,12 @@ namespace FreshMart.Models.Commands
 {
     public class CreateProductCommand : IRequest<ProductViewModel>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [DisplayName("Title (Required)")]
         public string Title { get; set; }
 
-        public int SellerId { get; set; }
+        public long SellerId { get; set; }
 
         [DisplayName("Price (Required)")]
         public float Price { get; set; }
@@ -29,10 +29,10 @@ namespace FreshMart.Models.Commands
         public int ItemInStock { get; set; }
 
         [DisplayName("District (Required)")]
-        public int DistrictId { get; set; }
+        public long DistrictId { get; set; }
 
         [DisplayName("Category (Required)")]
-        public int CategoryId { get; set; }
+        public long CategoryId { get; set; }
 
         //IMAGE
         [DisplayName("Upload an image (Required)")]

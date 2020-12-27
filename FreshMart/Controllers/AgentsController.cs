@@ -8,19 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using FreshMart.Models;
 using Microsoft.AspNetCore.Authorization;
 using FreshMart.Database;
+using FreshMart.Core;
 
 namespace FreshMart.Controllers
 {
     [Authorize]
     public class AgentsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
-        public AgentsController(ApplicationDbContext context)
+        public AgentsController(AppDbContext context)
         {
             _context = context;
         }
-
 
         // GET: Agents
         [Route("Agents")]
@@ -38,7 +38,8 @@ namespace FreshMart.Controllers
                 return RedirectToAction("AgentRequest", "Agents");
             }
 
-            var agentSingle = _context.Agents.Where(c => c.Email == User.Identity.Name).Single();
+            var agentSingle = _context.Agents.Where(c => c.Email == User.Identity.Name).Include(x => x.User)
+                .AsNoTracking().FirstOrDefault();
             ViewBag.districts = _context.Districts.ToList();
 
             return View(agentSingle);
@@ -74,7 +75,7 @@ namespace FreshMart.Controllers
             {
                 return View(agent);
             }
-
+            agent.Id = NumberUtilities.GetUniqueNumber();
             _context.Agents.Add(agent);
             _context.SaveChanges();
 
@@ -101,18 +102,11 @@ namespace FreshMart.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AgentExists(agent.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", agent.DistrictId);
+            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", agent.User.DistrictId);
             return View(agent);
         }
 
@@ -145,7 +139,7 @@ namespace FreshMart.Controllers
 
 
         [Route("Agents/OrderState/{id}/{sig}")]
-        public IActionResult OrderState(int id, string sig)
+        public IActionResult OrderState(long id, string sig)
         {
             var order = _context.Orders.Find(id);
             var agentOrder = _context.AgentOrders.Where(c => c.OrderId == order.Id);
@@ -159,36 +153,32 @@ namespace FreshMart.Controllers
             switch (sig)
             {
                 case "route":
-
                     aOrder.IsOnRoute = true;
                     _context.AgentOrders.Update(aOrder);
                     _context.SaveChanges();
                     break;
 
                 case "full":
-
                     aOrder.IsFullyCompleted = true;
                     _context.AgentOrders.Update(aOrder);
                     _context.SaveChanges();
 
-
                     order.IsOrderCompleted = true;
                     _context.Orders.Update(order);
                     _context.SaveChanges();
-
                     break;
+
                 default:
                     TempData["AgentOrderParamErr"] = "Parameter Not Found!";
                     return RedirectToAction("Orders", "Agents");
             }
 
-
-            TempData["AgentOrderSuccess"] = "Order State Changed successfully";
+            TempData["AgentOrderSuccess"] = "Order state changed successfully";
             return RedirectToAction("Orders", "Agents");
         }
 
 
-        private bool AgentExists(int id)
+        private bool AgentExists(long id)
         {
             return _context.Agents.Any(e => e.Id == id);
         }

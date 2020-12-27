@@ -9,9 +9,9 @@ namespace FreshMart.Services
 {
     public class Torce
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
-        public Torce(ApplicationDbContext _con)
+        public Torce(AppDbContext _con)
         {
             _context = _con;
         }
@@ -101,7 +101,7 @@ namespace FreshMart.Services
 
 
 
-        public List<Product> SearchProducts(string text, int? range, int? district)
+        public List<Product> SearchProducts(string text, int? range, long? district)
         {
 
             if (range == 1)
@@ -166,10 +166,7 @@ namespace FreshMart.Services
 
 
 
-
-
-
-        public List<Product> SearchProducts2(int? range, int? district)
+        public List<Product> SearchProducts2(int? range, long? district)
         {
             if (range == 1)
             {
@@ -280,7 +277,7 @@ namespace FreshMart.Services
         }
 
 
-        public List<Product> SearchProducts3(int? dist)
+        public List<Product> SearchProducts3(long? dist)
         {
             List<Product> products = _context.Products
                 .Include(c => c.Category)

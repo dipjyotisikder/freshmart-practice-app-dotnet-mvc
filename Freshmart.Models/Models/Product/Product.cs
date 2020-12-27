@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FreshMart.Core.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -6,17 +7,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace FreshMart.Models
 {
     [Table("Products")]
-    public class Product
+    public class Product : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-
         [DisplayName("Title (Required)")]
         public string Title { get; set; }
 
-        public int SellerId { get; set; }
+        public long SellerId { get; set; }
         [ForeignKey("SellerId")]
-        public Seller Seller { get; set; }
+        public virtual Seller Seller { get; set; }
 
         [DisplayName("Price (Required)")]
         public float Price { get; set; }
@@ -32,14 +30,14 @@ namespace FreshMart.Models
         public int ItemInStock { get; set; }
 
         [DisplayName("District (Required)")]
-        public int DistrictId { get; set; }
+        public long DistrictId { get; set; }
         [ForeignKey("DistrictId")]
-        public District District { get; set; }
+        public virtual District District { get; set; }
 
         [DisplayName("Category (Required)")]
-        public int CategoryId { get; set; }
+        public long CategoryId { get; set; }
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
         //IMAGE
         [DisplayName("Upload an image (Required)")]
@@ -50,12 +48,6 @@ namespace FreshMart.Models
         [DataType(DataType.Date)]
         public DateTime OfferExpireDate { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime CreatedAt { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime UpdatedAt { get; set; }
-
-        public ICollection<ProductOrder> ProductOrder { get; set; }
+        public virtual IEnumerable<ProductOrder> ProductOrders { get; set; }
     }
 }

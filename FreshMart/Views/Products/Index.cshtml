@@ -42,7 +42,7 @@
                     }
                     @foreach (var domain in Model.DistinctCat)
                     {
-                        var domainbyid = Model.Category.Where(c => c.Domain == domain).Select(c => c.Id).First();
+                        var domainbyid = Model.Category.Where(c => c.Domain == domain).Select(c => c.Id).FirstOrDefault();
 
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingOne">
@@ -62,7 +62,7 @@
                                             var data = Model.Category.Where(c => c.Domain == domain).Select(c => c.Name).ToList();
                                             foreach (var items in data)
                                             {
-                                                var ID = Model.Category.Where(c => c.Name == items).Select(c => c.Id).First();
+                                                var ID = Model.Category.Where(c => c.Name == items).Select(c => c.Id).FirstOrDefault();
                                                 <li>
                                                     <i class="fa fa-list"></i>
                                                     @Html.ActionLink(items, "index", "products", new { id = ID })

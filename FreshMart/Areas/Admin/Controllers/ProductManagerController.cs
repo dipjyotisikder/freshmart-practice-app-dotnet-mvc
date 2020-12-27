@@ -7,15 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FreshMart.Models;
 using FreshMart.Database;
+using FreshMart.Core;
 
 namespace FreshMart.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class ProductManagerController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
-        public ProductManagerController(ApplicationDbContext context)
+        public ProductManagerController(AppDbContext context)
         {
             _context = context;
         }
@@ -64,6 +65,7 @@ namespace FreshMart.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                product.Id = NumberUtilities.GetUniqueNumber();
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -146,7 +148,7 @@ namespace FreshMart.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private bool ProductExists(long id)
         {
             return _context.Products.Any(e => e.Id == id);
         }

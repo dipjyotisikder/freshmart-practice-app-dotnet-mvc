@@ -11,10 +11,10 @@
                     <div class="row">
                         <div class="text-center">
                             <h2>Add Product Now</h2>
-                            <h3 class="text-green">@Model.Error</h3>
+                            <small class="text-green">@Model.Error</small>
                             @if (TempData["uploaderr"] != null)
                             {
-                                <h3 class="text-danger">@TempData["uploaderr"] </h3>
+                                <small class="text-danger">@TempData["uploaderr"] </small>
                             }
 
 

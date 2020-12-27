@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FreshMart.Core.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -6,16 +7,14 @@ using System.Threading.Tasks;
 
 namespace FreshMart.Models
 {
-    public class AgentOrder
+    public class AgentOrder : BaseEntity
     {
-        public int Id { get; set; }
-
-        public int AgentId { get; set; }
+        public long AgentId { get; set; }
         [ForeignKey("AgentId")]
         public Agent Agent { get; set; }
 
 
-        public int OrderId { get; set; }
+        public long OrderId { get; set; }
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
 

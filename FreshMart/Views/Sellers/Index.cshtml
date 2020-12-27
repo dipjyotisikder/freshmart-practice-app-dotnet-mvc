@@ -35,7 +35,7 @@
                                 @Html.HiddenFor(c => c.Seller.Email)
                                 <div class="form-group">
                                     <label asp-for="Seller.Email" class="control-label"></label>
-                                    <input id="sellerEmail" asp-for="Seller.Email" class="form-control" disabled="disabled" value="@Model.Seller.Email" />
+                                    <input id="sellerEmail" asp-for="Seller.Email" class="form-control" disabled="disabled" value="@Model.Seller?.Email" />
                                     <span asp-validation-for="Seller.Email" class="text-danger"></span>
                                 </div>
 
@@ -62,21 +62,18 @@
 
                                 <div class="form-group">
                                     <label class="control-label">District</label>
-                                    @*@Html.LabelFor(model => model.Seller.DistrictId, htmlAttributes: new { @class = "control-label " })*@
-                                    <div class="col-md-12">
-
-                                        <label for="cars">Select Districtssssss:</label>
-                                        <select id="sellerDistrictId" class="form-control">
+                                        <select id="sellerDistrictId" asp-for="Seller.User.DistrictId" class="form-control">
+                                            <option value="@string.Empty">Please select a district.</option>
                                             @foreach (var item in Model.Districts)
                                             {
-                                                <option value="@item.Id">@item.Name</option>
+
+                                                <option value="@item.Id" selected="@item.Id==@Model.Seller.User.DistrictId">@item.Name</option>
                                             }
                                         </select>
 
                                         @*@Html.DropDownListFor(model => model.Seller.DistrictId, new SelectList(Model.Districts, "Id", "Name"), "Select District", new { @class = "form-control" })
                                             @Html.ValidationMessageFor(model => model.Seller.DistrictId, "", new { @class = "text-danger" })*@
-                                    </div>
-                                </div>
+                                                                    </div>
 
 
                                 <div class="form-group">

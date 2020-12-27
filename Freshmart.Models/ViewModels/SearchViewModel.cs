@@ -9,7 +9,7 @@ namespace FreshMart.Models.ViewModels
     {
         public string Text { get; set; }
 
-        public int? DistrictId { get; set; }
+        public long? DistrictId { get; set; }
 
         public List<int> PriceRanges { get; set; }
         public int? PriceRange { get; set; }

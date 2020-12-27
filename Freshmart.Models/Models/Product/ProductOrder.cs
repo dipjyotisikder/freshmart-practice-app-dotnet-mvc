@@ -1,18 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using FreshMart.Core.Infrastructure;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace FreshMart.Models
 {
     [Table("ProductOrders")]
-    public class ProductOrder
+    public class ProductOrder : BaseEntity
     {
-
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
 
 
-        public int OrderId { get; set; }
+        public long OrderId { get; set; }
         [ForeignKey("OrderId")]
-        public Order Order { get; set; }
+        public virtual Order Order { get; set; }
 
         public int NumberOfProduct { get; set; }
     }

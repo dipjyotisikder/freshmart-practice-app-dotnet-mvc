@@ -26,7 +26,7 @@
                     @Html.DisplayNameFor(model => model.DateOfBirth)
                 </th>
             <th>
-                @Html.DisplayNameFor(model => model.District)
+                @Html.DisplayNameFor(model => model.User.District)
             </th>
             <th></th>
         </tr>
@@ -47,7 +47,7 @@
                 @Html.DisplayFor(modelItem => item.DateOfBirth)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.District.Division)
+                @Html.DisplayFor(modelItem => item.User.District.Division)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

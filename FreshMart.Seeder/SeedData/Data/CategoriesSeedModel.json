@@ -1,0 +1,42 @@
+﻿[
+  {
+    "id": "1",
+    "name": "Coffee"
+  },
+  {
+    "id": "2",
+    "name": "Tea"
+  },
+  {
+    "id": "3",
+    "name": "Sugar"
+  },
+  {
+    "id": "4",
+    "name": "Fast food"
+  },
+  {
+    "id": "5",
+    "name": "Pet food"
+  },
+  {
+    "id": "6",
+    "name": "Flowers"
+  },
+  {
+    "id": "7",
+    "name": "Fruit and vegetables"
+  },
+  {
+    "id": "9",
+    "name": "Groceries"
+  },
+  {
+    "id": "10",
+    "name": "Brush"
+  },
+  {
+    "id": "11",
+    "name": "Toothpaste"
+  }
+]

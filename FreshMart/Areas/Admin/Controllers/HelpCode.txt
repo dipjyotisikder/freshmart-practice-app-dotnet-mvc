@@ -118,7 +118,7 @@
 
 
         [HttpPost]
-        public IActionResult Edit(int id, Agent agent)
+        public IActionResult Edit(long id, Agent agent)
         {
             if (id != agent.Id)
             {

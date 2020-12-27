@@ -7,15 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FreshMart.Models;
 using FreshMart.Database;
+using FreshMart.Core;
 
 namespace FreshMart.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class DistrictManagerController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
-        public DistrictManagerController(ApplicationDbContext context)
+        public DistrictManagerController(AppDbContext context)
         {
             _context = context;
         }
@@ -43,6 +44,7 @@ namespace FreshMart.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                district.Id = NumberUtilities.GetUniqueNumber();
                 _context.Add(district);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -51,7 +53,7 @@ namespace FreshMart.Areas.Admin.Controllers
         }
 
         // GET: Admin/CategoryDomains/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
             {
@@ -68,7 +70,7 @@ namespace FreshMart.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Division,Name")] District district)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Division,Name")] District district)
         {
             if (id != district.Id)
             {
@@ -103,7 +105,7 @@ namespace FreshMart.Areas.Admin.Controllers
         // POST: Admin/CategoryDomains/Delete/5
 
         [Route("Admin/CategoryDomains/DeleteConfirmed/{id}")]
-        public IActionResult DeleteConfirmed(int? id)
+        public IActionResult DeleteConfirmed(long? id)
         {
             if (id == null)
             {
@@ -121,7 +123,7 @@ namespace FreshMart.Areas.Admin.Controllers
 
         }
 
-        private bool DistrictExists(int id)
+        private bool DistrictExists(long id)
         {
             return _context.Districts.Any(e => e.Id == id);
         }

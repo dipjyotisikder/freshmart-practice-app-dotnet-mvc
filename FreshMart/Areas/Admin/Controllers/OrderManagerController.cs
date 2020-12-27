@@ -14,9 +14,9 @@ namespace FreshMart.Areas.Admin.Controllers
     [Area("Admin")]
     public class OrderManagerController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
-        public OrderManagerController(ApplicationDbContext context)
+        public OrderManagerController(AppDbContext context)
         {
             _context = context;
         }
@@ -25,13 +25,14 @@ namespace FreshMart.Areas.Admin.Controllers
         [Route("Admin/OrderManager")]
         public IActionResult Index()
         {
-            var orders = _context.Orders.Include(o => o.Customer).Include(o => o.District);
+            var orders = _context.Orders.Include(o => o.Customer).AsNoTracking();
+
             var products = _context.Products
                 .Include(p => p.District)
                 .Include(p => p.Category)
-                .Include(p => p.Seller)
+                .Include(p => p.Seller).AsNoTracking()
                 .ToList();
-            var productOrder = _context.ProductOrders.ToList();
+            var productOrder = _context.ProductOrders.AsNoTracking().ToList();
             var vm = new OrderVM
             {
                 Products = products,
@@ -49,7 +50,7 @@ namespace FreshMart.Areas.Admin.Controllers
 
         // GET: Admin/OrderManager/Details/5
         [Route("Admin/OrderManager/Details/{id}")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
             {
@@ -57,8 +58,7 @@ namespace FreshMart.Areas.Admin.Controllers
             }
 
             var order = await _context.Orders
-                .Include(o => o.Customer)
-                .Include(o => o.District)
+                .Include(o => o.Customer).AsNoTracking()
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (order == null)
             {
@@ -70,7 +70,7 @@ namespace FreshMart.Areas.Admin.Controllers
 
         [HttpGet]
         [Route("Admin/OrderManager/ConfirmOrder/{id}")]
-        public IActionResult ConfirmOrder(int id)
+        public IActionResult ConfirmOrder(long id)
         {
             var vm = new OrderVM
             {
@@ -112,7 +112,7 @@ namespace FreshMart.Areas.Admin.Controllers
 
 
         [Route("Admin/OrderManager/ConfirmOrder/{id}/{approve}")]
-        public IActionResult ConfirmOrder(int? id, bool approve)
+        public IActionResult ConfirmOrder(long? id, bool approve)
         {
             if (id == null)
             {
@@ -148,7 +148,7 @@ namespace FreshMart.Areas.Admin.Controllers
 
 
         // GET: Admin/OrderManager/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
             {
@@ -161,7 +161,6 @@ namespace FreshMart.Areas.Admin.Controllers
                 return NotFound();
             }
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", order.CustomerId);
-            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", order.DistrictId);
             return View(order);
         }
 
@@ -170,7 +169,7 @@ namespace FreshMart.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,SellerId,AccountNo,TransactionId,Name,Email,ShippingAddress,DistrictId,PostalCode,Zip,StreetNo,TotalPrice,IsOrderCompleted,OrderDate")] Order order)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,CustomerId,SellerId,AccountNo,TransactionId,Name,Email,ShippingAddress,DistrictId,PostalCode,Zip,StreetNo,TotalPrice,IsOrderCompleted,OrderDate")] Order order)
         {
             if (id != order.Id)
             {
@@ -198,7 +197,6 @@ namespace FreshMart.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", order.CustomerId);
-            ViewData["DistrictId"] = new SelectList(_context.Districts, "Id", "Division", order.DistrictId);
             return View(order);
         }
 
@@ -208,7 +206,7 @@ namespace FreshMart.Areas.Admin.Controllers
 
         // POST: Admin/OrderManager/Delete/5
         [Route("Admin/OrderManager/Delete/{id}")]
-        public async Task<IActionResult> DeleteConfirmed(int? id)
+        public async Task<IActionResult> DeleteConfirmed(long? id)
         {
             if (id == null)
             {
@@ -221,7 +219,7 @@ namespace FreshMart.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderExists(int id)
+        private bool OrderExists(long id)
         {
             return _context.Orders.Any(e => e.Id == id);
         }

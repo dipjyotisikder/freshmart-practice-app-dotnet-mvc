@@ -17,11 +17,11 @@ namespace FreshMart.Services.QueryHandler
     {
         private readonly IProductService _productService;
         private readonly ICartService _cartService;
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
         public ProductQueryHandler(IProductService productService,
             ICartService cartService,
-            ApplicationDbContext context)
+            AppDbContext context)
         {
             _productService = productService;
             _cartService = cartService;
@@ -48,11 +48,11 @@ namespace FreshMart.Services.QueryHandler
 
                 products = torce.SearchProducts(request.Text, request.PriceRange);
             }
-            //            010
-            if (request.Text != null && request.PriceRange == null && request.DistrictId != null)
-            {
-                products = torce.SearchProducts(request.Text, request.DistrictId);
-            }
+            ////            010
+            //if (request.Text != null && request.PriceRange == null && request.DistrictId != null)
+            //{
+            //    products = torce.SearchProducts(request.Text, request.DistrictId);
+            //}
 
             //            011
             if (request.Text != null && request.PriceRange == null && request.DistrictId == null)
@@ -88,7 +88,7 @@ namespace FreshMart.Services.QueryHandler
 
             var categories = _productService.GetAllCategories();
             var districts = _productService.GetAllDistricts();
-            var domains = _productService.GetCategoryByDomain();
+            var domains = _productService.GetParentCategoryNames();
             var totalPrice = _cartService.GetCartTotalPrice();
 
             var productView = new ProductViewModel

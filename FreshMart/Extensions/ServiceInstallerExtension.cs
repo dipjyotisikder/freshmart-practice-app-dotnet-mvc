@@ -18,20 +18,18 @@ namespace FreshMart.Extensions
         public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration configuration)
         {
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<AppDbContext>(options =>
                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(
+            services.AddIdentity<AppUser, IdentityRole>(
                 options =>
                 {
-                    options.Password.RequiredLength = 3;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireDigit = false;
-                }
-                )
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                })
+                .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
 

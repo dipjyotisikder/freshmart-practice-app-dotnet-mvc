@@ -13,6 +13,8 @@ using Microsoft.Extensions.Options;
 using FreshMart.Models;
 using FreshMart.Services;
 using FreshMart.Models.ViewModels;
+using FreshMart.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace FreshMart.Controllers
 {
@@ -20,21 +22,24 @@ namespace FreshMart.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly AppDbContext _context;
         private readonly ILogger _logger;
 
         public AccountController(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _context = context;
         }
 
         [TempData]
@@ -210,7 +215,10 @@ namespace FreshMart.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            return View(new RegisterViewModel
+            {
+                Districts = _context.Districts.AsNoTracking().AsEnumerable()
+            }); ;
         }
 
         [HttpPost]
@@ -219,9 +227,16 @@ namespace FreshMart.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            model.Districts = _context.Districts.AsNoTracking().AsEnumerable();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new AppUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    DistrictId = model.DistrictId ?? 0
+                };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -232,6 +247,14 @@ namespace FreshMart.Controllers
                 }
                 AddErrors(result);
             }
+            else
+            {
+                if (model.DistrictId == 0 || model.DistrictId == null || !model.Districts.Any(x => x.Id == model.DistrictId))
+                {
+                    var succeeded = ModelState.TryAddModelError(nameof(model.DistrictId), "District is not valid");
+                }
+            }
+
 
             // If we got this far, something failed, redisplay form
             return View(model);
@@ -306,7 +329,7 @@ namespace FreshMart.Controllers
                 {
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new AppUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

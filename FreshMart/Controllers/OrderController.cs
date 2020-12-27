@@ -10,6 +10,7 @@ using FreshMart.Models.ViewModels;
 using FreshMart.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,17 +20,20 @@ namespace FreshMart.Controllers
     public class OrderController : Controller
     {
 
-        //ApplicationUser appUser;
+        //AppUser appUser;
 
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
         private int cartCount;
-        private Customer customer;
         private IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<AppUser> _userManager;
 
-        public OrderController(ApplicationDbContext con, IHttpContextAccessor hca)
+        public OrderController(AppDbContext con,
+            IHttpContextAccessor hca,
+            UserManager<AppUser> userManager)
         {
             _context = con;
             _httpContextAccessor = hca;
+            _userManager = userManager;
         }
 
         protected override void Dispose(bool disposing)
@@ -63,7 +67,7 @@ namespace FreshMart.Controllers
 
             var districts = _context.Districts.ToList();
             var categories = _context.Categories.ToList();
-            var domains = _context.Categories.Select(c => c.Domain).Distinct().ToList();
+            var domains = _context.Categories.Where(x => x.ParentId != null).Select(c => c.Parent.Name).Distinct().ToList();
             CartService cs = new CartService(_httpContextAccessor, _context);
             var totalPrice = cs.GetCartTotalPrice();
             var Count = cs.GetCartCount();
@@ -104,7 +108,7 @@ namespace FreshMart.Controllers
         }
 
         [HttpPost]
-        public ActionResult Checkout(OrderViewModel ovModel)
+        public async Task<ActionResult> Checkout(OrderViewModel ovModel)
         {
 
             if (SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart") == null)
@@ -112,18 +116,32 @@ namespace FreshMart.Controllers
                 return RedirectToAction("Index", "Products");
             }
 
-            var customerChk = _context.Customers.Where(c => c.Email == ovModel.Order.Email);
 
-            if (customerChk.ToList().Count < 1)
+            Customer customer = new Customer();
+            var customerExisted = _context.Customers.Where(c => c.Email == ovModel.Order.Email).AsNoTracking().FirstOrDefault();
+            if (customerExisted == null)
             {
-                var cust = new Customer();
-                cust.Name = ovModel.Order.Name;
-                cust.Email = ovModel.Order.Email;
-                cust.Phone = ovModel.Customer.Phone;
-                cust.DistrictId = ovModel.Order.DistrictId;
-                _context.Customers.Add(cust);
-                _context.SaveChanges();
-                customer = cust;
+                //nw user
+                var user = new AppUser
+                {
+                    Email = ovModel.Order.Email,
+                    UserName = ovModel.Order.Email
+                };
+                var res = await _userManager.CreateAsync(user);
+                if (res.Succeeded)
+                {
+                    var cust = new Customer
+                    {
+                        Id = NumberUtilities.GetUniqueNumber(),
+                        Name = ovModel.Order.Name,
+                        Email = ovModel.Order.Email,
+                        Phone = ovModel.Customer.Phone,
+                        UserId = user.Id
+                    };
+                    await _context.Customers.AddAsync(cust);
+                    await _context.SaveChangesAsync();
+                    customer = cust;
+                }
             }
             else
             {
@@ -132,9 +150,9 @@ namespace FreshMart.Controllers
 
             var order = new Order
             {
+                Id = NumberUtilities.GetUniqueNumber(),
                 Name = customer.Name,
                 Email = customer.Email,
-                DistrictId = customer.DistrictId,
                 //fixed portion
                 ShippingAddress = ovModel.Order.ShippingAddress,
                 PostalCode = ovModel.Order.PostalCode,
@@ -158,6 +176,7 @@ namespace FreshMart.Controllers
             {
                 var order_product = new ProductOrder
                 {
+                    Id = NumberUtilities.GetUniqueNumber(),
                     OrderId = order.Id,
                     ProductId = item.Product.Id,
                     NumberOfProduct = item.Quantity
@@ -180,13 +199,14 @@ namespace FreshMart.Controllers
             //clear the session now
             HttpContext.Session.Clear();
 
-            var agents = _context.Agents.Where(c => c.DistrictId == order.DistrictId).ToList();
+            var agents = _context.Agents.Where(c => c.User.DistrictId == customer.User.DistrictId).ToList();
             var random = new Random();
             var index = random.Next(0, agents.Count);
             var agent = agents[index];
 
             var agentorder = new AgentOrder
             {
+                Id = NumberUtilities.GetUniqueNumber(),
                 AgentId = agent.Id,
                 OrderId = order.Id,
                 IsPaid = false,

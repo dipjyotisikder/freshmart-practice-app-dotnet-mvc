@@ -37,13 +37,13 @@
             @Html.DisplayFor(model => model.DateOfBirth)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.District)
+            @Html.DisplayNameFor(model => model.User.District)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.District.Division)
+            @Html.DisplayFor(model => model.User.District.Division)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-default" /> |

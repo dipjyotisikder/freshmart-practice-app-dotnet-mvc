@@ -9,9 +9,9 @@ namespace FreshMart.Areas.Admin.Controllers
     [Area("Admin")]
     public class AgentsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly AppDbContext _context;
 
-        public AgentsController(ApplicationDbContext context)
+        public AgentsController(AppDbContext context)
         {
             _context = context;
         }
@@ -20,15 +20,15 @@ namespace FreshMart.Areas.Admin.Controllers
         [Route("Admin/Agents")]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Agents.Include(a => a.District);
-            return View(await applicationDbContext.ToListAsync());
+            var agent = await _context.Agents.Include(x => x.User).ThenInclude(x => x.District).AsNoTracking().ToListAsync();
+            return View(agent);
         }
 
         // GET: Admin/Agents/Details/5
 
 
         [Route("Admin/Agents/AgentApprove/{id}")]
-        public IActionResult AgentApprove(int id)
+        public IActionResult AgentApprove(long id)
         {
             var agent = _context.Agents.Find(id);
             agent.Approval = true;
@@ -41,12 +41,9 @@ namespace FreshMart.Areas.Admin.Controllers
         }
 
 
-
-
-
         // GET: Admin/Agents/Delete/5
         [Route("Admin/Agents/Delete/{id}")]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
             {
@@ -54,19 +51,18 @@ namespace FreshMart.Areas.Admin.Controllers
             }
 
             var agent = await _context.Agents
-                .Include(a => a.District)
+                .Include(x => x.User).ThenInclude(x => x.District)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (agent == null)
             {
                 return NotFound();
             }
-
             return View(agent);
         }
 
 
         [Route("Admin/Agents/DeleteConfirmed/{id}")]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(long id)
         {
             var agent = _context.Agents.SingleOrDefault(m => m.Id == id);
             _context.Agents.Remove(agent);
@@ -74,7 +70,8 @@ namespace FreshMart.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AgentExists(int id)
+
+        private bool AgentExists(long id)
         {
             return _context.Agents.Any(e => e.Id == id);
         }
