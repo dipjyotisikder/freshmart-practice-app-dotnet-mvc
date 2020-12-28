@@ -9,9 +9,10 @@ namespace FreshMart.Services
     {
         //Products
         List<Product> GetAllProducts();
-        List<Product> GetProductsByCategoryId(long id);
-        Task<ProductViewModel> GetProductViewModelWithCartCountAsync(long id);
 
+        List<Product> GetProductsByCategoryId(long id);
+
+        Task<ProductViewModel> GetProductViewModelWithCartCountAsync(long id);
 
         Task<List<District>> GetAllDistrictsAsync();
 

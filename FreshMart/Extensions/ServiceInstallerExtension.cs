@@ -33,6 +33,7 @@ namespace FreshMart.Extensions
                 .AddDefaultTokenProviders();
 
 
+            services.AddSingleton<IFileServiceFactory, FileServiceFactory>();
 
             //for session
             // Add application services.
