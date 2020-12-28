@@ -6,7 +6,7 @@ using FreshMart.Core;
 using FreshMart.Database;
 using FreshMart.Helper;
 using FreshMart.Models;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 using FreshMart.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

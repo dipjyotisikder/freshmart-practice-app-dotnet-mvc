@@ -1,6 +1,6 @@
 ﻿using FreshMart.Database;
 using FreshMart.Models.Commands;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using FreshMart.Models;
 
-namespace FreshMart.Models.ViewModels
+namespace FreshMart.ViewModels
 {
-    public class OrderVM
+    public class AdminOrderViewModel
     {
         public Product Product { get; set; }
         public ProductOrder ProductOrder { get; set; }
@@ -16,10 +16,7 @@ namespace FreshMart.Models.ViewModels
         public IEnumerable<Product> Products { get; set; }
         public IEnumerable<ProductOrder> ProductOrders { get; set; }
         public IEnumerable<Order> Orders { get; set; }
-        public MatchVM MatchVm { get; set; }
+        public MatchViewModel MatchVm { get; set; }
         public IEnumerable<AgentOrder> AgentOrders { get; set; }
-
-
-
     }
 }

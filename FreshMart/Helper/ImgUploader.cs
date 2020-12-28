@@ -22,53 +22,44 @@ namespace FreshMart.Helper
 
         public string ImageUrl(IFormFile file)
         {
-
-
             if (file == null || file.Length == 0) return null;
-            string extension = Path.GetExtension(file.FileName);
 
+            string path_Root = _env.ContentRootPath;
+            string path_dir = $"/StaticFiles/Images/{file.FileName}";
 
-            //if (extension.ToString() != ".jpg" || extension.ToString() != ".JPG" || extension.ToString() != ".jpeg" || extension.ToString() != ".JPEG")
-            //{
-            //    return null;
-            //}
-
-            string path_Root = _env.WebRootPath;
-
-            string path_to_Images = path_Root + "\\Assets\\images\\products\\" + file.FileName;
+            string path_to_Images = $"{path_Root}{path_dir}";
 
             using (var stream = new FileStream(path_to_Images, FileMode.Create))
             {
-
                 file.CopyTo(stream);
-                string revUrl = Reverse.reverse(path_to_Images);
-                int count = 0;
-                int flag = 0;
 
-                for (int i = 0; i < revUrl.Length; i++)
-                {
-                    if (revUrl[i] == '\\')
-                    {
-                        count++;
+                //string revUrl = Reverse.reverse(path_to_Images);
+                //int count = 0;
+                //int flag = 0;
 
-                    }
-                    if (count == 4)
-                    {
-                        flag = i;
-                        break;
-                    }
-                }
+                //for (int i = 0; i < revUrl.Length; i++)
+                //{
+                //    if (revUrl[i] == '\\')
+                //    {
+                //        count++;
 
-                string sub = revUrl.Substring(0, flag + 1);
-                string finalString = Reverse.reverse(sub);
+                //    }
+                //    if (count == 4)
+                //    {
+                //        flag = i;
+                //        break;
+                //    }
+                //}
 
-                string f = finalString.Replace("\\", "/");
-                imgString = f;
+                //string sub = revUrl.Substring(0, flag + 1);
+                //string finalString = Reverse.reverse(sub);
+                //string f = finalString.Replace("\\", "/");
+                //imgString = f;
+
+
+                stream.Dispose();
             }
-
-            return imgString;
-
-
+            return path_dir;
         }
 
     }

@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FreshMart.Models;
 using FreshMart.Database;
-using FreshMart.Models.ViewModels;
 using FreshMart.Core;
+using FreshMart.ViewModels;
 
 namespace FreshMart.Areas.Admin.Controllers
 {

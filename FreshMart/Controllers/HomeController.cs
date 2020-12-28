@@ -10,7 +10,7 @@ using FreshMart.Helper;
 using Microsoft.AspNetCore.Http;
 using FreshMart.Services;
 using FreshMart.Database;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 using FreshMart.Core;
 
 namespace FreshMart.Controllers

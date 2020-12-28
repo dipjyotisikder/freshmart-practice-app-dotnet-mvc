@@ -1,4 +1,4 @@
-﻿@model FreshMart.Models.ViewModels.SellerViewModel
+﻿@model FreshMart.ViewModels.SellerViewModel
 
 @{
     Layout = "~/Views/Shared/_SellerLayout.cshtml";
@@ -24,7 +24,6 @@
                                 @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
 
                                 @Html.HiddenFor(c => c.Seller.Id)
-                                @Html.HiddenFor(c => c.Seller.Approval)
 
                                 <div class="form-group">
                                     <label asp-for="Seller.Name" class="control-label"></label>

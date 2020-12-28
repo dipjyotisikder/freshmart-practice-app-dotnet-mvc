@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FreshMart.Models;
 
-namespace FreshMart.Models.ViewModels
+namespace FreshMart.ViewModels
 {
     public class CategoryViewModel
 

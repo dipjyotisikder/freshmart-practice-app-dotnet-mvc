@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using MediatR;
 using System.Collections.Generic;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 
 namespace FreshMart.Models.Queries
 {

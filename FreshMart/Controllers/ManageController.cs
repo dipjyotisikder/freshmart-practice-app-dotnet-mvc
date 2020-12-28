@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 using FreshMart.Models;
 
 using FreshMart.Services;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 
 namespace FreshMart.Controllers
 {

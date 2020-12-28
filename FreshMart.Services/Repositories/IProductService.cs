@@ -1,5 +1,5 @@
 ﻿using FreshMart.Models;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

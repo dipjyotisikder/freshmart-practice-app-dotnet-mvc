@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FreshMart.Extensions;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
 
 namespace FreshMart
 {
@@ -31,8 +33,26 @@ namespace FreshMart
                 app.UseBrowserLink();
                 app.UseDatabaseErrorPage();
             }
+;
+            app.UseFileServer(new FileServerOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "StaticFiles"))
+            });
 
+            // using Microsoft.Extensions.FileProviders;
+            // using System.IO;
             app.UseStaticFiles();
+
+            app.UseFileServer(new FileServerOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, "StaticFiles")),
+                RequestPath = "/StaticFiles",
+                EnableDirectoryBrowsing = true
+            });
+
+
+
             app.UseAuthentication();
             app.UseSession();
 

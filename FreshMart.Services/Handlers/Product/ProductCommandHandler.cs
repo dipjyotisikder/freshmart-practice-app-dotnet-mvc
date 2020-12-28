@@ -1,5 +1,5 @@
 ﻿using FreshMart.Models.Commands;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 using MediatR;
 using System;
 using System.Collections.Generic;

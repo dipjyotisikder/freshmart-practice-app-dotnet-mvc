@@ -11,10 +11,11 @@ using Microsoft.AspNetCore.Http;
 using FreshMart.Helper;
 using Microsoft.AspNetCore.Hosting;
 using FreshMart.Database;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 using FreshMart.Models.Commands;
 using MediatR;
 using FreshMart.Core;
+using FreshMart.ViewModels;
 
 namespace FreshMart.Controllers
 {
@@ -172,82 +173,96 @@ namespace FreshMart.Controllers
         }
 
 
-        [Route("Seller/SellProduct/{id}")]
-        public ActionResult SellProduct(long? id)
+        [Route("Seller/CreateProduct/{id}")]
+        public async Task<ActionResult> CreateProduct(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var sellerChk = _context.Sellers.Find(id);
+            var sellerChk = await _context.Sellers.FindAsync(id);
             if (User.Identity.Name != sellerChk.Email)
             {
                 return NotFound();
             }
 
-            var data = _context.Sellers.Where(c => c.Email == User.Identity.Name);
-            if (id == null || data.SingleOrDefault() == null)
+            var data = await _context.Sellers.Where(c => c.Email == User.Identity.Name).AsNoTracking().SingleOrDefaultAsync();
+            if (id == null || data == null)
             {
                 NotFound();
             }
 
-            var vm = new SellerViewModel
+            var model = new SellerViewModel
             {
-                Products = _context.Products.Where(c => c.SellerId == id).AsNoTracking().ToList(),
-                Districts = _context.Districts.AsNoTracking().ToList(),
-                Categories = _context.Categories.AsNoTracking().ToList(),
-                Sellers = _context.Sellers.AsNoTracking().ToList(),
-                Seller = _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefault()
+                Products = await _context.Products.Where(c => c.SellerId == id).AsNoTracking().ToListAsync(),
+                Districts = await _context.Districts.AsNoTracking().ToListAsync(),
+                Categories = await _context.Categories.AsNoTracking().ToListAsync(),
+                Sellers = await _context.Sellers.AsNoTracking().ToListAsync(),
+                Seller = await _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefaultAsync(),
+
+                CreateProductViewModel = new CreateProductViewModel
+                {
+                    Description = "",
+                    Title = "",
+                    Price = 0,
+                    ItemInStock = 0,
+                    Unit = "",
+                    OfferPrice = 0,
+                    CategoryId = 0
+                }
             };
-            return View(vm);
+            return View(model);
         }
 
         [HttpPost]
-        [Route("Seller/SellProduct/{id}")]
-        public ActionResult SellProduct(long id, IFormFile file, SellerViewModel vm)
+        [Route("Seller/CreateProduct/{id}")]
+        public async Task<ActionResult> CreateProduct(long id, IFormFile file, SellerViewModel request)
         {
             if (id == 0)
             {
                 return NotFound();
             }
 
-            var sellerChk = _context.Sellers.Find(id);
+            var sellerChk = await _context.Sellers.FindAsync(id);
             if (User.Identity.Name != sellerChk.Email)
             {
                 return NotFound();
             }
 
-            var data = _context.Sellers.Where(c => c.Email == User.Identity.Name);
-            if (data.SingleOrDefault() == null)
+            var data = await _context.Sellers.Where(c => c.Email == User.Identity.Name).FirstOrDefaultAsync();
+            if (data == null)
             {
                 NotFound();
             }
 
-            if (vm.Product.Title == null)
+            if (request.CreateProductViewModel.Title == null)
             {
-                ModelState.AddModelError("Product.Title", "Please enter product name");
+                ModelState.AddModelError("CreateProductViewModel.Title", "Please enter product name");
             }
 
-            if (vm.Product.Price == 0)
+            if (request.CreateProductViewModel.Price == 0)
             {
-                ModelState.AddModelError("Product.Price", "Please enter price");
+                ModelState.AddModelError("CreateProductViewModel.Price", "Please enter price");
             }
 
-            if (vm.Product.ItemInStock == 0)
+            if (request.CreateProductViewModel.ItemInStock == 0)
             {
-                ModelState.AddModelError("Product.ItemInStock", "Please enter itemInStock");
+                ModelState.AddModelError("CreateProductViewModel.ItemInStock", "Please enter itemInStock");
             }
 
-            if (vm.Product.Unit == null)
+            if (request.CreateProductViewModel.Unit == null)
             {
-                ModelState.AddModelError("Product.Unit", "Please enter unit");
+                ModelState.AddModelError("CreateProductViewModel.Unit", "Please enter unit");
             }
 
-            if (vm.Product.Title == null
-                || vm.Product.Price == 0
-                || vm.Product.ItemInStock == 0
-                || vm.Product.Unit == null)
+            if (request.CreateProductViewModel.CategoryId == 0 || request.CreateProductViewModel.CategoryId == null)
+            {
+                ModelState.AddModelError("CreateProductViewModel.CategoryId", "Please enter category");
+            }
+
+            //MODEL WILL BE INVALID IF
+            if (request.CreateProductViewModel.Title == null || request.CreateProductViewModel.Price == 0 || request.CreateProductViewModel.ItemInStock == 0 || request.CreateProductViewModel.Unit == null || request.CreateProductViewModel.CategoryId == 0 || request.CreateProductViewModel.CategoryId == null)
             {
                 var vmfinal = new SellerViewModel
                 {
@@ -255,59 +270,62 @@ namespace FreshMart.Controllers
                     Districts = _context.Districts.AsNoTracking().ToList(),
                     Categories = _context.Categories.AsNoTracking().ToList(),
                     Sellers = _context.Sellers.AsNoTracking().ToList(),
-                    Seller = _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefault()
+                    Seller = _context.Sellers.Where(x => x.Id == id).AsNoTracking().FirstOrDefault(),
+                    Product = request.Product,
+                    CreateProductViewModel = request.CreateProductViewModel
                 };
 
                 return View(vmfinal);
             }
 
 
-            var Seller = _context.Sellers.Where(s => s.Email.Contains(User.Identity.Name));
-            if (Seller.SingleOrDefault() == null)
-            {
-                return RedirectToAction("request", "Products", new { id = id });
-            }
+            var seller = await _context.Sellers.Where(s => s.Email.Contains(User.Identity.Name)).Include(x => x.User).FirstOrDefaultAsync();
+            if (seller == null) { return RedirectToAction("request", "Products", new { id = id }); }
 
+
+            //IMAGE UPLOAD
             ImgUploader img = new ImgUploader(_environment);
-
-            var imgPath = img.ImageUrl(file);   //function working here
+            var imgPath = img.ImageUrl(file);
             if (imgPath == null)
             {
                 TempData["uploaderr"] = "May be Image is not perfect!";
-                return RedirectToAction("SellProduct", "Sellers", new { id = Seller.Single().Id });
+                return RedirectToAction("CreateProduct", "Sellers", new { id = seller.Id });
             }
 
 
+            //CREATE PRODUCT MODEL
             var products = new Product
             {
                 Id = NumberUtilities.GetUniqueNumber(),
-                Title = vm.Product.Title,
-                Description = vm.Product.Description,
-                Price = vm.Product.Price,
-                SellerId = Seller.Single().Id,
-                CategoryId = vm.Product.CategoryId,
-                DistrictId = vm.Product.DistrictId,
-                IsPublished = vm.Product.IsPublished,  //manually values
-                Unit = vm.Product.Unit,
-                ItemInStock = vm.Product.ItemInStock,
-                CreatedAt = DateTime.Now,              //manually valuess
-                UpdatedAt = DateTime.Now,              //manually valuess
-                OfferExpireDate = DateTime.Now,        //manually valuess
+                Title = request.CreateProductViewModel.Title,
+                Description = request.CreateProductViewModel.Description,
+                Price = request.CreateProductViewModel.Price ?? 0,
+                SellerId = seller.Id,
+                CategoryId = request.CreateProductViewModel.CategoryId ?? 0,
+                DistrictId = seller.User.DistrictId,
+                IsPublished = true,
+                Unit = request.CreateProductViewModel.Unit,
+                ItemInStock = request.CreateProductViewModel.ItemInStock ?? 0,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                OfferExpireDate = DateTime.UtcNow.AddDays(100),
                 ImagePath = imgPath,
-                OfferPrice = 1     //need to change
+                OfferPrice = request.CreateProductViewModel.OfferPrice ?? 0     //need to change
             };
+            await _context.Products.AddAsync(products);
+            await _context.SaveChangesAsync();
 
-            _context.Products.Add(products);
-            _context.SaveChanges();
 
             var vms = new SellerViewModel
             {
-                Products = _context.Products.Where(c => c.SellerId == id).ToList(),
-                Districts = _context.Districts.ToList(),
-                Categories = _context.Categories.ToList(),
-                Sellers = _context.Sellers.ToList(),
+                Products = await _context.Products.Where(c => c.SellerId == id).ToListAsync(),
+                Districts = await _context.Districts.ToListAsync(),
+                Categories = await _context.Categories.ToListAsync(),
+                Sellers = await _context.Sellers.ToListAsync(),
                 Error = "Your Product has been added"
             };
+
+
             return View(vms);
         }
 

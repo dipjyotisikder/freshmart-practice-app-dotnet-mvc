@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using FreshMart.Models;
+using System.Collections.Generic;
 
-namespace FreshMart.Models.ViewModels
+namespace FreshMart.ViewModels
 {
     public class LayoutCategoryViewModel
     {

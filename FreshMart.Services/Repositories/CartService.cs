@@ -1,6 +1,6 @@
 ﻿using FreshMart.Core;
 using FreshMart.Database;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;

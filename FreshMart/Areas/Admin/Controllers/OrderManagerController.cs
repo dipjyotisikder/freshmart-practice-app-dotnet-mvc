@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FreshMart.Models;
 using FreshMart.Database;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 
 namespace FreshMart.Areas.Admin.Controllers
 {
@@ -33,7 +33,7 @@ namespace FreshMart.Areas.Admin.Controllers
                 .Include(p => p.Seller).AsNoTracking()
                 .ToList();
             var productOrder = _context.ProductOrders.AsNoTracking().ToList();
-            var vm = new OrderVM
+            var vm = new AdminOrderViewModel
             {
                 Products = products,
                 Orders = orders,
@@ -72,7 +72,7 @@ namespace FreshMart.Areas.Admin.Controllers
         [Route("Admin/OrderManager/ConfirmOrder/{id}")]
         public IActionResult ConfirmOrder(long id)
         {
-            var vm = new OrderVM
+            var vm = new AdminOrderViewModel
             {
                 Order = _context.Orders.Find(id),
 
@@ -82,7 +82,7 @@ namespace FreshMart.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("Admin/OrderManager/Match")]
-        public IActionResult Match(OrderVM orderVm)
+        public IActionResult Match(AdminOrderViewModel orderVm)
         {
             if (orderVm.MatchVm.AccountNo == null || orderVm.MatchVm.TransactionId == null)
             {
@@ -101,7 +101,7 @@ namespace FreshMart.Areas.Admin.Controllers
                 ViewBag.confirm = "Matched !";
             }
 
-            var vm = new OrderVM
+            var vm = new OrderViewModel
             {
                 Order = _context.Orders.Find(orderVm.Order.Id)
             };

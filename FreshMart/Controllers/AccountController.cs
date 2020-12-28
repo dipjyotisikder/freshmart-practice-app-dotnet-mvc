@@ -12,9 +12,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using FreshMart.Models;
 using FreshMart.Services;
-using FreshMart.Models.ViewModels;
 using FreshMart.Database;
 using Microsoft.EntityFrameworkCore;
+using FreshMart.ViewModels;
 
 namespace FreshMart.Controllers
 {

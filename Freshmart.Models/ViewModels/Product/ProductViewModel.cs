@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FreshMart.Models.ViewModels
+namespace FreshMart.ViewModels
 {
     public class ProductViewModel : LayoutCategoryViewModel
     {
@@ -16,7 +16,5 @@ namespace FreshMart.Models.ViewModels
         public SellerRequest SellerRequest { get; set; }
 
         public SearchViewModel SearchVm { get; set; }
-
-
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FreshMart.Models.ViewModels;
+using FreshMart.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FreshMart.Areas.Admin.Controllers
@@ -21,7 +21,7 @@ namespace FreshMart.Areas.Admin.Controllers
 
         [Route("Admin/AdminAccount")]
         [HttpPost]
-        public IActionResult SignIn(AccountVM account)
+        public IActionResult SignIn(AccountViewModel account)
         {
 
 
