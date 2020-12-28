@@ -35,7 +35,7 @@ namespace FreshMart.Areas.Admin.Controllers
         public async Task<IActionResult> SellerIndex()
         {
 
-            var applicationDbContext = _context.Sellers.Include(x=>x.User).ThenInclude(x=>x.District);
+            var applicationDbContext = _context.Sellers.Include(x => x.User).ThenInclude(x => x.District);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -67,7 +67,7 @@ namespace FreshMart.Areas.Admin.Controllers
         [HttpGet("Admin/SellerBuyerManager/RequestIndex")]
         public async Task<IActionResult> RequestIndex()
         {
-            var sellerRequests = await _context.SellerRequests.Include(s => s.District).AsNoTracking().ToListAsync();
+            var sellerRequests = await _context.SellerRequests.AsNoTracking().ToListAsync();
             ViewBag.sellerRequests = sellerRequests;
             return View();
         }
@@ -94,8 +94,7 @@ namespace FreshMart.Areas.Admin.Controllers
                     Email = email,
                     CompanyName = requestedSeller.CompanyName,
                     Phone = requestedSeller.Phone,
-                    DateOfBirth = requestedSeller.DateOfBirth,
-                    Approval = true
+                    DateOfBirth = requestedSeller.DateOfBirth
                 }; await _context.Sellers.AddAsync(seller);
 
                 var appUserr = _context.Users.Where(x => x.Email == email).FirstOrDefault();

@@ -1,6 +1,7 @@
 ﻿using FreshMart.Models;
 using FreshMart.Models.ViewModels;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FreshMart.Services
 {
@@ -9,18 +10,19 @@ namespace FreshMart.Services
         //Products
         List<Product> GetAllProducts();
         List<Product> GetProductsByCategoryId(long id);
-        ProductViewModel GetProductViewModelWithCartCount(long id);
+        Task<ProductViewModel> GetProductViewModelWithCartCountAsync(long id);
 
 
-        List<District> GetAllDistricts();
+        Task<List<District>> GetAllDistrictsAsync();
 
         //Category
-        List<Category> GetAllCategories();
+        Task<List<Category>> GetAllCategoriesAsync();
+
         List<string> GetParentCategoryNames();
 
-        Category GetParentCategory(long id);
+        Task<Category> GetParentCategoryAsync(long id);
 
-        ProductViewModel GetProductViewModel();
+        Task<ProductViewModel> GetProductViewModelAsync();
 
     }
 }

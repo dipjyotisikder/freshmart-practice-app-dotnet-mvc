@@ -30,7 +30,7 @@ namespace FreshMart.Services.CommandHandler
             {
                 var seller = _context.Sellers.Where(x => x.Id == request.Id)
                     .Include(x => x.User)
-                    .ThenInclude(x=>x.District)
+                    .ThenInclude(x => x.District)
                     .FirstOrDefault();
 
                 if (seller != null)
@@ -38,7 +38,6 @@ namespace FreshMart.Services.CommandHandler
                     seller.Id = request.Id;
                     seller.Name = request.Name;
                     seller.Email = request.Email;
-                    seller.Approval = request.Approval;
                     seller.CompanyName = request.CompanyName;
                     seller.DateOfBirth = request.DateOfBirth;
                     seller.Phone = request.Phone;

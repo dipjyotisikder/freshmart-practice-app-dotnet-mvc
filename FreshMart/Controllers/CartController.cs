@@ -52,7 +52,7 @@ namespace FreshMart.Controllers
                 this.cartCount = cart.Count;
                 ViewBag.total = cart.Sum(c => c.Product.Price * c.Quantity);
             }
-            var viewmodel = _productService.GetProductViewModel();
+            var viewmodel = _productService.GetProductViewModelAsync();
 
             ViewBag.CartCount = this.cartCount;
             return View(viewmodel);

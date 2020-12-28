@@ -40,7 +40,6 @@
                                     <th>Seller Name</th>
                                     <th>Email</th>
                                     <th>District</th>
-                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,24 +50,6 @@
                                         <td>@item.Name</td>
                                         <td>@item.Email</td>
                                         <td>@item.User.District.Name</td>
-
-
-
-                                        <td>
-                                            @if (item.Approval == true)
-                                            {
-                                                <span>
-                                                    Approved
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                <span> Not Approved</span>
-                                            }
-
-                                            @*@Html.ActionLink("Delete", "DeleteSeller", "SellerBuyerManager", new { id = item.Id })*@
-                                        </td>
-
                                     </tr>
                                 }
 

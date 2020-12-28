@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FreshMart.Services
 {
@@ -49,12 +50,12 @@ namespace FreshMart.Services
         }
 
 
-        public ProductViewModel GetProductViewModelWithCartCount(long id)
+        public async Task<ProductViewModel> GetProductViewModelWithCartCountAsync(long id)
         {
             var products = GetProductsByCategoryId(id);
             var all = GetAllProducts();
-            var categories = GetAllCategories();
-            var districts = GetAllDistricts();
+            var categories = await GetAllCategoriesAsync();
+            var districts = await GetAllDistrictsAsync();
             var domains = categories.Where(x => x.ParentId != null).Select(x => x.Parent.Name);
 
             var productView = new ProductViewModel
@@ -71,16 +72,16 @@ namespace FreshMart.Services
         }
 
 
-        public List<District> GetAllDistricts()
+        public async Task<List<District>> GetAllDistrictsAsync()
         {
-            return _context.Districts.AsNoTracking().ToList();
+            return await _context.Districts.AsNoTracking().ToListAsync();
         }
 
 
         //Category
-        public List<Category> GetAllCategories()
+        public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            return _context.Categories.Include(x => x.Parent).AsNoTracking().ToList();
+            return await _context.Categories.Include(x => x.Parent).AsNoTracking().ToListAsync();
         }
 
 
@@ -95,20 +96,20 @@ namespace FreshMart.Services
         }
 
 
-        public Category GetParentCategory(long categoryId)
+        public async Task<Category> GetParentCategoryAsync(long categoryId)
         {
-            return _context.Categories.Where(c => c.Id == categoryId).Select(c => c.Parent).FirstOrDefault();
+            return await _context.Categories.Where(c => c.Id == categoryId).Select(c => c.Parent).FirstOrDefaultAsync();
         }
 
 
-        public ProductViewModel GetProductViewModel()
+        public async Task<ProductViewModel> GetProductViewModelAsync()
         {
             CartService cs = new CartService(_httpContextAccessor, _context);
             var totalPrice = cs.GetCartTotalPrice();
             var viewmodel = new ProductViewModel
             {
-                District = GetAllDistricts(),
-                Category = GetAllCategories(),
+                District = await GetAllDistrictsAsync(),
+                Category = await GetAllCategoriesAsync(),
                 DistinctCat = GetParentCategoryNames(),
                 CartCount = _cartService.GetCartCount(),
                 TotalPrice = totalPrice,

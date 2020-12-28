@@ -159,7 +159,7 @@ namespace FreshMart.Controllers
                     SellerName = model.SellerRequest.SellerName,
                     Email = User.Identity.Name,
                     Phone = model.SellerRequest.Phone,
-                    DistrictId = model.SellerRequest.DistrictId,
+                    //DistrictId = model.SellerRequest.DistrictId,
                     DateOfBirth = model.SellerRequest.DateOfBirth,
                     CompanyName = model.SellerRequest.CompanyName
                 };

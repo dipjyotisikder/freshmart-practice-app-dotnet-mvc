@@ -63,9 +63,9 @@ namespace FreshMart.Controllers
 
         [HttpGet]
         [Route("products/index/{id}")]
-        public IActionResult Index(long id)
+        public async Task<IActionResult> Index(long id)
         {
-            var productView = _productService.GetProductViewModelWithCartCount(id);
+            var productView = await _productService.GetProductViewModelWithCartCountAsync(id);
             return View(productView);
         }
 
@@ -73,11 +73,11 @@ namespace FreshMart.Controllers
 
         [HttpGet]
         [Route("products/category/{id}")]
-        public IActionResult Category(long id)
+        public async Task<IActionResult> Category(long id)
         {
             var cartCount = _cartService.GetCartCount();
 
-            var parent = _productService.GetParentCategory(id);
+            var parent = await _productService.GetParentCategoryAsync(id);
 
             var products = _context.Products
                 .Include(c => c.Category)
@@ -86,8 +86,8 @@ namespace FreshMart.Controllers
                 .ToList();
 
             var pro = _productService.GetAllProducts();
-            var categories = _productService.GetAllCategories();
-            var districts = _productService.GetAllDistricts();
+            var categories = await _productService.GetAllCategoriesAsync();
+            var districts = await _productService.GetAllDistrictsAsync();
             var parentCategories = _productService.GetParentCategoryNames();
 
             var productView = new ProductViewModel
@@ -111,14 +111,14 @@ namespace FreshMart.Controllers
         public IActionResult AddProduct()
         {
 
-            var viewmodel = _productService.GetProductViewModel();
+            var viewmodel = _productService.GetProductViewModelAsync();
             return View(viewmodel);
         }
 
 
         [Authorize]
         [HttpPost]
-        public IActionResult AddProduct(IFormFile file, ProductViewModel vm)
+        public async Task<IActionResult> AddProduct(IFormFile file, ProductViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -145,7 +145,6 @@ namespace FreshMart.Controllers
                     IsPublished = vm.Product.IsPublished,  //manually valuess
                     Unit = vm.Product.Unit,
                     ItemInStock = vm.Product.ItemInStock,
-                    CreatedAt = DateTime.Now,//manually valuess
                     UpdatedAt = DateTime.Now,//manually valuess
                     OfferExpireDate = DateTime.Now,//manually valuess
                     ImagePath = imgPath,
@@ -153,8 +152,8 @@ namespace FreshMart.Controllers
 
                 };
 
-                _context.Add(products);
-                _context.SaveChanges();
+                await _context.AddAsync(products);
+                await _context.SaveChangesAsync();
 
                 long id = products.Id;
 
@@ -162,7 +161,7 @@ namespace FreshMart.Controllers
             }
             else
             {
-                var viewmodel = _productService.GetProductViewModel();
+                var viewmodel = _productService.GetProductViewModelAsync();
 
                 ViewBag.error = "You Cannot ignore required fields";
                 return View("AddProduct", viewmodel);

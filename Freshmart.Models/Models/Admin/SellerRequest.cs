@@ -21,9 +21,9 @@ namespace FreshMart.Models
 
         public DateTime DateOfBirth { get; set; }
 
-        public long DistrictId { get; set; }
-        [ForeignKey("DistrictId")]
-        public District District { get; set; }
+        //public long DistrictId { get; set; }
+        //[ForeignKey("DistrictId")]
+        //public District District { get; set; }
 
         public string CompanyName { get; set; }
     }

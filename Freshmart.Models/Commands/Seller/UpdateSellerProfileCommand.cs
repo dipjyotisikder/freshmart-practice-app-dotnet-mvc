@@ -22,6 +22,6 @@ namespace FreshMart.Models.Commands
 
         public string CompanyName { get; set; }
 
-        public bool? Approval { get; set; }
+        public bool Approval { get; set; }
     }
 }

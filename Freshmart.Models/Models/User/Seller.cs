@@ -24,7 +24,5 @@ namespace FreshMart.Models
         public virtual AppUser User { get; set; }
 
         public string CompanyName { get; set; }
-
-        public bool? Approval { get; set; }
     }
 }
