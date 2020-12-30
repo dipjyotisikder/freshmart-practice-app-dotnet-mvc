@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +13,8 @@ using FreshMart.Database;
 using FreshMart.ViewModels;
 using FreshMart.Models.Commands;
 using MediatR;
-using FreshMart.Core;
-using FreshMart.ViewModels;
+using FreshMart.Core.Utilities;
+using FreshMart.Documents.Commands;
 
 namespace FreshMart.Controllers
 {
@@ -283,14 +282,17 @@ namespace FreshMart.Controllers
             if (seller == null) { return RedirectToAction("request", "Products", new { id = id }); }
 
 
-            //IMAGE UPLOAD
-            ImgUploader img = new ImgUploader(_environment);
-            var imgPath = img.ImageUrl(file);
-            if (imgPath == null)
-            {
-                TempData["uploaderr"] = "May be Image is not perfect!";
-                return RedirectToAction("CreateProduct", "Sellers", new { id = seller.Id });
-            }
+            ////IMAGE UPLOAD
+            //ImgUploader img = new ImgUploader(_environment);
+            //var imgPath = img.ImageUrl(file);
+            //if (imgPath == null)
+            //{
+            //    TempData["uploaderr"] = "May be Image is not perfect!";
+            //    return RedirectToAction("CreateProduct", "Sellers", new { id = seller.Id });
+            //}
+
+            var uploadCommand = new CreateDocumentCommand() { File = file };
+            var uploadedPhoto = await _mediator.Send(uploadCommand);
 
 
             //CREATE PRODUCT MODEL
@@ -309,7 +311,8 @@ namespace FreshMart.Controllers
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 OfferExpireDate = DateTime.UtcNow.AddDays(100),
-                ImagePath = imgPath,
+                //ImagePath = imgPath,
+                PhotoId = uploadedPhoto.Id,
                 OfferPrice = request.CreateProductViewModel.OfferPrice ?? 0     //need to change
             };
             await _context.Products.AddAsync(products);

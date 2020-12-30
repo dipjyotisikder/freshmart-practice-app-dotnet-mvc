@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FreshMart.Seeder.SeedData.Extension;
 
-namespace Imgloo.seeder
+namespace FreshMart.seeder
 {
     public class SeederConcrete
     {
@@ -42,7 +42,7 @@ namespace Imgloo.seeder
                     return "done!";
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }

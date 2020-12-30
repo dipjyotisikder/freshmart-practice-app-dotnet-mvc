@@ -1,85 +1,57 @@
-﻿using System.Collections.Generic;
+﻿using FreshMart.Database;
+using Microsoft.AspNetCore.Hosting;
+using System.Collections.Generic;
 using static FreshMart.Core.Constants.Constants;
 
-namespace FreshMart.Services
+namespace FreshMart.Services.Factories
 {
 
     public class FileServiceFactory : IFileServiceFactory
     {
-        IFileService photoFileService = null;
-        IFileService docFileService = null;
-        IFileService videoFileService = null;
+        private IFileService amazonS3FileService = null;
+        private IFileService localFileService = null;
 
-        public IFileService Create(string extension)
+        private readonly IHostingEnvironment _env;
+        private readonly IEncryptionServices _encryptionService;
+        private readonly AppDbContext _context;
+
+        public FileServiceFactory(IHostingEnvironment env, IEncryptionServices encryptionService, AppDbContext context)
         {
-            var type = GetType(extension);
+            _env = env;
+            _encryptionService = encryptionService;
+            _context = context;
+        }
 
-            if (type == FileTypes.photo)
+
+        public IFileService Create(string type)
+        {
+            if (type == StorageType.amazon.ToString())
             {
-                if (photoFileService == null)
+                if (amazonS3FileService == null)
                 {
-                    photoFileService = new PhotoFileService();
-                    return photoFileService;
+                    amazonS3FileService = new AmazonS3FileService();
+                    return amazonS3FileService;
                 }
                 else
                 {
-                    return photoFileService;
+                    return amazonS3FileService;
                 }
             }
-            else if (type == FileTypes.docs)
+            else if (type == StorageType.local.ToString())
             {
-                if (docFileService == null)
+                if (localFileService == null)
                 {
-                    docFileService = new DocFileService();
-                    return docFileService;
+                    localFileService = new LocalFileService(_env, _encryptionService, _context);
+                    return localFileService;
                 }
                 else
                 {
-                    return docFileService;
-                }
-            }
-            else if (type == FileTypes.video)
-            {
-                if (videoFileService == null)
-                {
-                    videoFileService = new DocFileService();
-                    return videoFileService;
-                }
-                else
-                {
-                    return videoFileService;
+                    return localFileService;
                 }
             }
 
             return null;
         }
 
-
-
-        public FileTypes GetType(string extension)
-        {
-            return GetMimeTypes()[extension];
-        }
-
-
-
-        private Dictionary<string, FileTypes> GetMimeTypes()
-        {
-            return new Dictionary<string, FileTypes>
-            {
-                {".txt", FileTypes.docs},
-                {".pdf", FileTypes.docs},
-                {".doc", FileTypes.docs},
-                {".docx", FileTypes.docs},
-                {".xls", FileTypes.docs},
-                {".xlsx", FileTypes.docs},
-                {".zip", FileTypes.docs},
-                {".png", FileTypes.photo},
-                {".jpg", FileTypes.photo},
-                {".jpeg",FileTypes.photo},
-                {".gif", FileTypes.photo},
-                {".csv", FileTypes.docs}
-            };
-        }
     }
 }

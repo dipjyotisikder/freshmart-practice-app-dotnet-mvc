@@ -6,11 +6,18 @@ namespace FreshMart.Core.Constants
 {
     public static class Constants
     {
-        public enum FileTypes
+        public enum FileType
         {
-            photo = 1,
-            docs,
-            video
+            Photo = 1,
+            Doc,
+            Video
+        }
+
+
+        public enum StorageType
+        {
+            local = 1,
+            amazon
         }
     }
 }

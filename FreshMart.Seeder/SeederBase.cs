@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Imgloo.seeder;
+using FreshMart.seeder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using FreshMart.Database;
 using System.Threading.Tasks;
 
-namespace Imgloo.Seeder
+namespace FreshMart.Seeder
 {
     public class SeederBase
     {

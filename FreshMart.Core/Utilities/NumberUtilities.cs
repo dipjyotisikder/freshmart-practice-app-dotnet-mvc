@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace FreshMart.Core
+namespace FreshMart.Core.Utilities
 {
     public static class NumberUtilities
     {

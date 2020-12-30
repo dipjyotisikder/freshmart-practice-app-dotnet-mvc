@@ -10,6 +10,8 @@ using System;
 using MediatR;
 using FreshMart.Models.Queries;
 using FreshMart.Services.QueryHandler;
+using FreshMart.Core.Options;
+using FreshMart.Services.Factories;
 
 namespace FreshMart.Extensions
 {
@@ -17,9 +19,9 @@ namespace FreshMart.Extensions
     {
         public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<StorageOptions>(configuration.GetSection(nameof(StorageOptions)));
 
-            services.AddDbContext<AppDbContext>(options =>
-               options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<AppUser, IdentityRole>(
                 options =>
@@ -28,12 +30,13 @@ namespace FreshMart.Extensions
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireDigit = false;
-                })
-                .AddEntityFrameworkStores<AppDbContext>()
+                }).AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-
-            services.AddSingleton<IFileServiceFactory, FileServiceFactory>();
+            services.AddScoped<IEncryptionServices, EncryptionServices>();
+            services.AddScoped<IFileServiceFactory, FileServiceFactory>();
+            services.AddScoped<IFileService, LocalFileService>();
+            services.AddScoped<IFileService, AmazonS3FileService>();
 
             //for session
             // Add application services.

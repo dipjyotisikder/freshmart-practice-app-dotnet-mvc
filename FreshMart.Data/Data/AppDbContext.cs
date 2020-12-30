@@ -30,6 +30,9 @@ namespace FreshMart.Database
         public DbSet<SellerRequest> SellerRequests { get; set; }
 
 
+        public DbSet<Document> Documents { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

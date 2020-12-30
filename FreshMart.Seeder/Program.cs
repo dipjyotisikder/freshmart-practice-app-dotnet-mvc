@@ -1,8 +1,8 @@
-﻿using Imgloo.Seeder;
+﻿using FreshMart.Seeder;
 using System;
 using System.Threading.Tasks;
 
-namespace Imgloo.Init
+namespace FreshMart.Init
 {
     class Program
     {

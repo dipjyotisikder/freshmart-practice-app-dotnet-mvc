@@ -39,7 +39,12 @@ namespace FreshMart.Models
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
-        //IMAGE
+
+        public long PhotoId { get; set; }
+        [ForeignKey("PhotoId")]
+        public virtual Document Photo { get; set; }
+
+
         [DisplayName("Upload an image (Required)")]
         public string ImagePath { get; set; }
 

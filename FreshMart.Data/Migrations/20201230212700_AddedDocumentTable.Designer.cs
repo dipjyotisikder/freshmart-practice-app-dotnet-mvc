@@ -12,9 +12,10 @@ using System;
 namespace FreshMart.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201230212700_AddedDocumentTable")]
+    partial class AddedDocumentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,8 +318,6 @@ namespace FreshMart.Data.Migrations
 
                     b.Property<float>("OfferPrice");
 
-                    b.Property<long>("PhotoId");
-
                     b.Property<float>("Price");
 
                     b.Property<long>("SellerId");
@@ -334,8 +333,6 @@ namespace FreshMart.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("DistrictId");
-
-                    b.HasIndex("PhotoId");
 
                     b.HasIndex("SellerId");
 
@@ -600,11 +597,6 @@ namespace FreshMart.Data.Migrations
                     b.HasOne("FreshMart.Models.District", "District")
                         .WithMany()
                         .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("FreshMart.Models.Document", "Photo")
-                        .WithMany()
-                        .HasForeignKey("PhotoId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("FreshMart.Models.Seller", "Seller")

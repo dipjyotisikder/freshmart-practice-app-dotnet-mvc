@@ -1,13 +1,15 @@
 ﻿using FreshMart.Models;
-using FreshMart.ViewModels;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace FreshMart.Services
+namespace FreshMart.Services.Factories
 {
     public interface IFileService
     {
-        void Upload();
-        void Download();
+        Document Upload(IFormFile file);
+
+        Task<bool> Delete(long id);
+
+        string GetDocumentName(IFormFile file);
     }
 }

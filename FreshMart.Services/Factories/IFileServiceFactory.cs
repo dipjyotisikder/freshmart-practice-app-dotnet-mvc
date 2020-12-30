@@ -1,9 +1,8 @@
-﻿using static FreshMart.Core.Constants.Constants;
-
-namespace FreshMart.Services
+﻿namespace FreshMart.Services.Factories
 {
     public interface IFileServiceFactory
     {
-        IFileService Create(string ext);
+        IFileService Create(string type);
     }
 }
+

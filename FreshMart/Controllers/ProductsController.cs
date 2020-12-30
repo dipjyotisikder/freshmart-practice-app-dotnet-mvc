@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FreshMart.Core;
+using FreshMart.Core.Utilities;
 using FreshMart.Database;
 using FreshMart.Helper;
 using FreshMart.Models;
@@ -105,6 +103,7 @@ namespace FreshMart.Controllers
         }
 
 
+
         [Authorize]
         [HttpGet]
         [Route("Products/addproduct")]
@@ -114,6 +113,7 @@ namespace FreshMart.Controllers
             var viewmodel = _productService.GetProductViewModelAsync();
             return View(viewmodel);
         }
+
 
 
         [Authorize]
@@ -210,9 +210,6 @@ namespace FreshMart.Controllers
             };
             return View(viewmodel);
         }
-
-
-
 
 
 
