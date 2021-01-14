@@ -57,10 +57,20 @@ namespace FreshMart.Controllers
 
 
 
-            var products = await _context.Products
+            var products = _context.Products
                .Include(c => c.Category)
-               .Include(c => c.District).AsNoTracking()
-               .ToListAsync();
+               .Include(c => c.District)
+               .Include(x => x.Photo)
+               .AsEnumerable().Select(x =>
+               {
+                   if (x.Photo != null)
+                   {
+                       x.Photo.Path = "https://localhost:44318" + x.Photo.Path;
+                   }
+
+                   return x;
+               });
+
             var categories = await _context.Categories.Where(x => !x.IsParent).AsNoTracking().ToListAsync();
             var districts = await _context.Districts.AsNoTracking().ToListAsync();
             var domains = await _context.Categories.Where(x => x.IsParent).AsNoTracking().Select(c => c.Name).ToListAsync();
@@ -68,7 +78,7 @@ namespace FreshMart.Controllers
 
             var productView = new ProductViewModel
             {
-                Products = products,
+                Products = products.ToList(),
                 Category = categories,
                 District = districts,
                 DistinctCat = domains,

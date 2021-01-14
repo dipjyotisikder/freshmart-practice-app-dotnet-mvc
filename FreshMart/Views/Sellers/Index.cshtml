@@ -1,7 +1,7 @@
 ﻿@model FreshMart.ViewModels.SellerViewModel
 
 @{
-    Layout = "~/Views/Shared/_SellerLayout.cshtml";
+    Layout = "~/Views/Shared/Sellers/_SellerLayout.cshtml";
 }
 
 <div class="container">
@@ -61,18 +61,18 @@
 
                                 <div class="form-group">
                                     <label class="control-label">District</label>
-                                        <select id="sellerDistrictId" asp-for="Seller.User.DistrictId" class="form-control">
-                                            <option value="@string.Empty">Please select a district.</option>
-                                            @foreach (var item in Model.Districts)
-                                            {
+                                    <select id="sellerDistrictId" asp-for="Seller.User.DistrictId" class="form-control">
+                                        <option value="@string.Empty">Please select a district.</option>
+                                        @foreach (var item in Model.Districts)
+                                        {
 
-                                                <option value="@item.Id" selected="@item.Id==@Model.Seller.User.DistrictId">@item.Name</option>
-                                            }
-                                        </select>
+                                            <option value="@item.Id" selected="@item.Id==@Model.Seller.User.DistrictId">@item.Name</option>
+                                        }
+                                    </select>
 
-                                        @*@Html.DropDownListFor(model => model.Seller.DistrictId, new SelectList(Model.Districts, "Id", "Name"), "Select District", new { @class = "form-control" })
-                                            @Html.ValidationMessageFor(model => model.Seller.DistrictId, "", new { @class = "text-danger" })*@
-                                                                    </div>
+                                    @*@Html.DropDownListFor(model => model.Seller.DistrictId, new SelectList(Model.Districts, "Id", "Name"), "Select District", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Seller.DistrictId, "", new { @class = "text-danger" })*@
+                                </div>
 
 
                                 <div class="form-group">

@@ -33,7 +33,7 @@
                 <div class="col-md-3 agileinfo_new_products_grid">
                     <div class="agile_ecommerce_tab_left agileinfo_new_products_grid1">
                         <div class="hs-wrapper hs-wrapper1">
-                            <img src="@items.ImagePath" alt=" " class="img-responsive" />
+                            <img src="@items.Photo?.Path" alt=" " class="img-responsive" />
                             <div class="w3_hs_bottom w3_hs_bottom_sub">
                                 <ul>
                                     <li>
@@ -67,7 +67,7 @@
                             <section>
                                 <div class="modal-body">
                                     <div class="col-md-5 modal_body_left">
-                                        <img src="@items.ImagePath" alt=" " class="img-responsive" />
+                                        <img src="@items.Photo?.Path" alt=" " class="img-responsive" />
                                     </div>
                                     <div class="col-md-7 modal_body_right">
                                         <h4>@items.Title</h4>
@@ -131,7 +131,7 @@
                         @foreach (var items in p)
                         {
                             <li>
-                                <img src=@items.ImagePath alt=" " class="img-responsive" style="max-height:300px; max-width:300px" />
+                                <img src=@items.Photo?.Path alt=" " class="img-responsive" style="max-height:300px; max-width:300px" />
                             </li>
                         }
 
@@ -140,7 +140,7 @@
                 <script type="text/javascript">
                     $(window).load(function () {
                         $("#flexiselDemo1").flexisel({
-                            visibleItems: 4,
+                            visibleItems: 3,
                             animationSpeed: 1000,
                             autoPlay: true,
                             autoPlaySpeed: 3000,

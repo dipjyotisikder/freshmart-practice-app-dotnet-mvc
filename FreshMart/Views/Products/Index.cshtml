@@ -134,11 +134,11 @@
                             continue;
                         }
 
-                        <div class="col-md-4  ">
+                        <div class="col-md-3">
                             <div class="agile_ecommerce_tab_left dresses_grid">
                                 <div class="hs-wrapper hs-wrapper2">
 
-                                    <img src="@item.ImagePath" alt=" " class="img-responsive" />
+                                    <img src="@item.Photo?.Path" alt=" " class="img-responsive" />
 
                                     <div class="w3_hs_bottom w3_hs_bottom_sub1">
                                         <ul>
@@ -174,7 +174,7 @@
                                     <section>
                                         <div class="modal-body">
                                             <div class="col-md-5 modal_body_left">
-                                                <img src="@item.ImagePath" alt=" " class="img-responsive" />
+                                                <img src="@item.Photo?.Path" alt=" " class="img-responsive" />
                                             </div>
                                             <div class="col-md-7 modal_body_right">
                                                 <h4>@item.Title</h4>

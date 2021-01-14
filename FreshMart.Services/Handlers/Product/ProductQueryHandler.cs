@@ -35,7 +35,19 @@ namespace FreshMart.Services.QueryHandler
             var cartCount = _cartService.GetCartCount();
             Torce torce = new Torce(_context);
 
-            List<Product> products = new List<Product>();
+            var products = _context.Products
+               .Include(c => c.Category)
+               .Include(c => c.District)
+               .Include(x => x.Photo)
+               .AsEnumerable().Select(x =>
+               {
+                   if (x.Photo != null)
+                   {
+                       x.Photo.Path = "https://localhost:44318" + x.Photo.Path;
+                   }
+
+                   return x;
+               }).ToList();
 
             var categories = await _productService.GetAllCategoriesAsync();
 

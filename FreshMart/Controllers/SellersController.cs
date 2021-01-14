@@ -117,6 +117,7 @@ namespace FreshMart.Controllers
         }
 
 
+
         [Authorize]
         [HttpPost]
         [Route("Sellers/request")]
@@ -172,6 +173,7 @@ namespace FreshMart.Controllers
         }
 
 
+
         [Route("Seller/CreateProduct/{id}")]
         public async Task<ActionResult> CreateProduct(long? id)
         {
@@ -213,6 +215,8 @@ namespace FreshMart.Controllers
             };
             return View(model);
         }
+
+
 
         [HttpPost]
         [Route("Seller/CreateProduct/{id}")]
@@ -328,8 +332,9 @@ namespace FreshMart.Controllers
             };
 
 
-            return View(vms);
+            return RedirectToAction(nameof(SellerProducts), id);
         }
+
 
 
         [Route("Sellers/SellerProducts/{id}")]
@@ -362,7 +367,6 @@ namespace FreshMart.Controllers
 
 
 
-
         // GET: Sellers/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
@@ -392,7 +396,6 @@ namespace FreshMart.Controllers
 
 
 
-
         // POST: Sellers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -414,6 +417,8 @@ namespace FreshMart.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
 
         private bool SellerExists(long id)
         {

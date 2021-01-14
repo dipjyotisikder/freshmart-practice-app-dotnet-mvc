@@ -37,7 +37,7 @@ namespace FreshMart.Controllers
 
         }
         [Route("/Cart")]
-        public ActionResult Cart()
+        public async Task<ActionResult> Cart()
         {
 
             if (SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart") == null)
@@ -52,7 +52,7 @@ namespace FreshMart.Controllers
                 this.cartCount = cart.Count;
                 ViewBag.total = cart.Sum(c => c.Product.Price * c.Quantity);
             }
-            var viewmodel = _productService.GetProductViewModelAsync();
+            var viewmodel = await _productService.GetProductViewModelAsync();
 
             ViewBag.CartCount = this.cartCount;
             return View(viewmodel);
