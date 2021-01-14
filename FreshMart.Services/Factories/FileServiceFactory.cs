@@ -53,5 +53,17 @@ namespace FreshMart.Services.Factories
             return null;
         }
 
+        public IFileService Create()
+        {
+            if (localFileService == null)
+            {
+                localFileService = new LocalFileService(_env, _encryptionService, _context);
+                return localFileService;
+            }
+            else
+            {
+                return localFileService;
+            }
+        }
     }
 }

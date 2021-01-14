@@ -294,7 +294,6 @@ namespace FreshMart.Controllers
             var uploadCommand = new CreateDocumentCommand() { File = file };
             var uploadedPhoto = await _mediator.Send(uploadCommand);
 
-
             //CREATE PRODUCT MODEL
             var products = new Product
             {

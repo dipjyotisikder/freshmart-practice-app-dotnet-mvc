@@ -38,7 +38,7 @@ namespace FreshMart.Services.CommandHandler
             _context = context;
             _encryptionService = encryptionService;
             _storageOption = storageOption.CurrentValue;
-            _fileService = fileFactory.Create(_storageOption.DefaultStorage);
+            _fileService = fileFactory.Create();
         }
 
         public async Task<IdNameViewModel> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
