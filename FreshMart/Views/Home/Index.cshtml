@@ -22,6 +22,7 @@
     @*<div class="new-products">*@
 
     <div class="container">
+        <br />
         <h2 class="text-center" style="color:#ff9659">Our Products</h2>
 
         <div class="agileinfo_new_products_grids">
@@ -130,8 +131,8 @@
 
                         @foreach (var items in p)
                         {
-                            <li>
-                                <img src=@items.Photo?.Path alt=" " class="img-responsive" style="max-height:300px; max-width:300px" />
+                            <li class="recent-products">
+                                <img src=@items.Photo?.Path alt=" " class="img-responsive" />
                             </li>
                         }
 

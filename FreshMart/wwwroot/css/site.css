@@ -33,3 +33,8 @@
         display: none;
     }
 }
+
+
+.recent-products .img-responsive {
+    width: 200px;
+}

@@ -11,6 +11,7 @@ using FreshMart.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FreshMart.Controllers
 {
@@ -39,7 +40,6 @@ namespace FreshMart.Controllers
         [Route("/Cart")]
         public async Task<ActionResult> Cart()
         {
-
             if (SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart") == null)
             {
                 ViewBag.Message = "Your Cart Is Empty";
@@ -59,18 +59,21 @@ namespace FreshMart.Controllers
         }
 
         [Route("Cart/addtocart/{id}")]
-        public ActionResult AddToCart(long id)
+        public async Task<ActionResult> AddToCart(long id)
         {
-
-
-
-            //ViewBag.route = Url.RouteUrl(RouteData.Values);
             if (SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart") == null)
             {
                 var cart = new List<CartItem>();
                 var item = new CartItem
                 {
-                    Product = _context.Products.Find(id),
+                    Product = _context.Products.Where(x => x.Id == id).Include(x => x.Photo).AsEnumerable().Select(x =>
+                    {
+                        if (x.Photo != null)
+                        {
+                            x.Photo.Path = "https://localhost:44318" + x.Photo.Path;
+                        }
+                        return x;
+                    }).FirstOrDefault(),
                     Quantity = 1,
 
                 };
@@ -87,7 +90,14 @@ namespace FreshMart.Controllers
                 {
                     var item = new CartItem
                     {
-                        Product = _context.Products.Find(id),
+                        Product = _context.Products.Where(x => x.Id == id).Include(x => x.Photo).AsEnumerable().Select(x =>
+                       {
+                           if (x.Photo != null)
+                           {
+                               x.Photo.Path = "https://localhost:44318" + x.Photo.Path;
+                           }
+                           return x;
+                       }).FirstOrDefault(),
                         Quantity = 1,
 
                     };

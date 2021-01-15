@@ -5,7 +5,10 @@
     Layout = "~/Views/Shared/_MyLayout.cshtml";
 }
 
-<h2 class="text-center" style="margin-bottom:50px">Cart</h2>
+@if (ViewBag.CartCount > 0)
+{
+    <h2 class="text-center" style="margin-bottom: 20px;margin-top: 20px">Cart</h2>
+}
 
 @if (TempData["orderSuccess"] != null)
 {
@@ -14,19 +17,14 @@
 
 @if (ViewBag.CartCount == 0)
 {
-    <h1 class="text-center" style="margin-bottom:50px">Your Cart Is Empty</h1>
-
+    <h1 class="text-center" style="margin-bottom:20px;margin-top:20px">Your cart is empty.</h1>
 }
-
-
-
 else
 {
-    <!-- checkout -->
     <div class="checkout">
         <div class="container">
             <h3>Your shopping cart contains: <span style="color: coral; font-size: 25px;">@Model.CartCount </span>Products</h3>
-            <!---728x90--->
+
             <div style='margin: 0 auto;text-align: center;margin-top: 5px;'>
                 <script>
                     var allowedNumberOfEboundDynamicAdds = 4;
@@ -74,10 +72,7 @@ else
                             <tr class="rem1">
                                 <td class="invert">@count</td>
                                 <td class="invert-image">
-                                    <a href="single.html">
-                                        <img style="max-height:60px; max-width:60px;" src="@items.Product.ImagePath" alt=" "
-                                             class="img-responsive" />
-                                    </a>
+                                    <img style="max-height:60px; max-width:60px;" src="@items.Product.Photo?.Path" alt=" " class="img-responsive" />
                                 </td>
                                 <td class="invert">
                                     <div class="quantity">
@@ -109,17 +104,9 @@ else
                                 <td class="invert">Total Price : $@ViewBag.total </td>
                             </tr>
                         }
-
-
-
-                        <!--quantity-->
                     </table>
-
-                    @*                     <button class="btn btn-default" type="submit"> Update Quantity</button> *@
                 }
-
             </div>
-
 
             <div class="checkout-left">
                 <a asp-controller="Products" asp-action="Index" class="checkout-left-basket">
@@ -134,7 +121,5 @@ else
             </div>
         </div>
     </div>
-    <!-- //checkout -->
-
 }
 

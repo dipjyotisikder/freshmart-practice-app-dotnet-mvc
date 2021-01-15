@@ -5,7 +5,6 @@
         <h3>Recently added Products</h3>
 
         @{
-
             var p = Model.BaseProduct.Where(c => c.CreatedAt >= (DateTime.Now.AddDays(-5)));
         }
 
@@ -13,7 +12,7 @@
             <ul id="flexiselDemo1">
                 @foreach (var items in p)
                 {
-                    <li class="card" style="max-height: 250px">
+                    <li class="card recent-products" >
 
                         <img src=@items.Photo?.Path alt=" " class="img-responsive" />
 
