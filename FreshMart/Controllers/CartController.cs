@@ -34,9 +34,9 @@ namespace FreshMart.Controllers
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
-            //var b = User.Identity.Name.ToString();
-
         }
+
+
         [Route("/Cart")]
         public async Task<ActionResult> Cart()
         {
@@ -58,8 +58,9 @@ namespace FreshMart.Controllers
             return View(viewmodel);
         }
 
+
         [Route("Cart/addtocart/{id}")]
-        public async Task<ActionResult> AddToCart(long id)
+        public ActionResult AddToCart(long id)
         {
             if (SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart") == null)
             {
@@ -74,8 +75,7 @@ namespace FreshMart.Controllers
                         }
                         return x;
                     }).FirstOrDefault(),
-                    Quantity = 1,
-
+                    Quantity = 1
                 };
                 cart.Add(item);
 
@@ -110,7 +110,7 @@ namespace FreshMart.Controllers
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             }
 
-            return RedirectToAction("Cart");
+            return RedirectToAction(nameof(Cart));
         }
 
         [Route("Cart/RemoveItem/{id}")]
@@ -122,7 +122,7 @@ namespace FreshMart.Controllers
             cart.RemoveAt(index);
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
 
-            return RedirectToAction("Cart");
+            return RedirectToAction(nameof(Cart));
         }
 
         //local function start
@@ -137,11 +137,7 @@ namespace FreshMart.Controllers
             }
             return -1;
         }
-
         //local function end
-
-
-
 
     }
 }

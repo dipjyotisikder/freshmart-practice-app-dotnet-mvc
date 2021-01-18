@@ -15,7 +15,9 @@ namespace FreshMart.Services.Factories
         private readonly IEncryptionServices _encryptionService;
         private readonly AppDbContext _context;
 
-        public FileServiceFactory(IHostingEnvironment env, IEncryptionServices encryptionService, AppDbContext context)
+        public FileServiceFactory(IHostingEnvironment env,
+            IEncryptionServices encryptionService,
+            AppDbContext context)
         {
             _env = env;
             _encryptionService = encryptionService;

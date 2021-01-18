@@ -54,6 +54,7 @@ namespace FreshMart
 
 
             app.UseAuthentication();
+
             app.UseSession();
 
             app.UseMvc(routes =>
